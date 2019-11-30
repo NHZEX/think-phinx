@@ -3,4 +3,7 @@
 /vendor
 /.env
 /.php_cs.cache
+/config
+/.phinx
 /yarn-error.log
+/composer.lock
