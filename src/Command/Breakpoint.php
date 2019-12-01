@@ -10,7 +10,7 @@ use think\console\input\Option as InputOption;
 
 class Breakpoint extends AbstractCommand
 {
-    protected static $defaultName = 'phinx:breakpoint';
+    protected static $defaultName = 'migrate:breakpoint';
 
     /**
      * {@inheritdoc}

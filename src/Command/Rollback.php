@@ -11,7 +11,7 @@ use think\console\input\Option as InputOption;
 
 class Rollback extends AbstractCommand
 {
-    protected static $defaultName = 'phinx:rollback';
+    protected static $defaultName = 'migrate:rollback';
 
     /**
      * {@inheritdoc}

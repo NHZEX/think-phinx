@@ -9,7 +9,7 @@ use think\console\input\Option as InputOption;
 
 class Status extends AbstractCommand
 {
-    protected static $defaultName = 'phinx:status';
+    protected static $defaultName = 'migrate:status';
 
     protected function configure()
     {

@@ -17,7 +17,7 @@ use think\console\input\Option as InputOption;
 
 class SeedCreate extends AbstractCommand
 {
-    protected static $defaultName = 'phinx:seed:create';
+    protected static $defaultName = 'seed:create';
 
     /**
      * {@inheritdoc}

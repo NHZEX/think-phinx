@@ -9,7 +9,7 @@ use think\console\input\Option as InputOption;
 
 class SeedRun extends AbstractCommand
 {
-    protected static $defaultName = 'phinx:seed:run';
+    protected static $defaultName = 'seed:run';
 
     /**
      * {@inheritdoc}

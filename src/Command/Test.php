@@ -6,6 +6,7 @@ namespace HZEX\Phinx\Command;
 use InvalidArgumentException;
 use Phinx\Migration\Manager\Environment;
 use Phinx\Util\Util;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use think\console\input\Option as InputOption;
@@ -15,7 +16,7 @@ use think\console\input\Option as InputOption;
  */
 class Test extends AbstractCommand
 {
-    protected static $defaultName = 'phinx:test';
+    protected static $defaultName = 'migrate:test';
 
     /**
      * {@inheritdoc}
@@ -41,9 +42,9 @@ EOT
     /**
      * Verify configuration file
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @throws \RuntimeException
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @throws RuntimeException
      * @throws InvalidArgumentException
      * @return int 0 on success
      */

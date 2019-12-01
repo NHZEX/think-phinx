@@ -18,7 +18,7 @@ use think\console\output\question\Confirmation as ConfirmationQuestion;
 
 class Create extends AbstractCommand
 {
-    protected static $defaultName = 'phinx:create';
+    protected static $defaultName = 'migrate:create';
 
     /**
      * The name of the interface that any external template creation class is required to implement.

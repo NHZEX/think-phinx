@@ -12,7 +12,7 @@ use Throwable;
 
 class Migrate extends AbstractCommand
 {
-    protected static $defaultName = 'phinx:migrate';
+    protected static $defaultName = 'migrate:run';
 
     /**
      * {@inheritdoc}
