@@ -6,11 +6,11 @@
  * Time: 17:46
  */
 
-namespace Phinx;
+namespace HZEX\Phinx\Schema;
 
-use HZEX\Util;
 use Phinx\Db\Adapter\MysqlAdapter as M;
 use Phinx\Db\Table\Column;
+use think\helper\Str;
 
 /**
  * 字段构造增强
@@ -92,7 +92,8 @@ class Blueprint
     public static function __callStatic($callName, $arguments)
     {
         [$name, $input1] = array_pad($arguments, 2, null);
-        null === $name && $name = Util::toSnakeCase($callName);
+
+        null === $name && $name = Str::snake($callName);
         [$type, $limit] = self::TYPE_MAPPING[$callName];
 
         $column = new Column();

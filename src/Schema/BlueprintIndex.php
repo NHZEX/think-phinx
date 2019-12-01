@@ -3,38 +3,45 @@
  * Created by PhpStorm.
  * User: NHZEXG
  * Date: 2019/2/23
- * Time: 9:28
+ * Time: 10:07
  */
 
-namespace Phinx;
+namespace HZEX\Phinx\Schema;
 
-class BlueprintTable
+class BlueprintIndex
 {
-    protected $options = [
-        'id' => true,
-        'signed' => false,
-        'collation' => 'utf8mb4_general_ci',
-    ];
+    protected $options = [];
 
     /**
-     * 自定义主键名称 / false=关闭主键 / true=生成主键
-     * @param bool|string $value
+     * 是否唯一
+     * @param bool $value
      * @return $this
      */
-    public function id($value)
+    public function unique(bool $value = true)
     {
-        $this->options['id'] = $value;
+        $this->options['unique'] = $value;
         return $this;
     }
 
     /**
-     * 自定义主键字段
-     * @param array|string $value
+     * 索引长度
+     * @param int|array $value
      * @return $this
      */
-    public function primaryKey($value)
+    public function limit($value)
     {
-        $this->options['primary_key'] = $value;
+        $this->options['limit'] = $value;
+        return $this;
+    }
+
+    /**
+     * 索引名称
+     * @param string $name
+     * @return $this
+     */
+    public function name(string $name)
+    {
+        $this->options['name'] = $name;
         return $this;
     }
 
