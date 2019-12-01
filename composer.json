@@ -1,12 +1,12 @@
 {
     "name": "nhzex/think-phinx",
+    "type": "library",
     "description": "",
     "keywords": [
         "thinkphp",
         "thinkphp6",
         "blade"
     ],
-    "type": "library",
     "license": "Apache-2.0",
     "authors": [
         {

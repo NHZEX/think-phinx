@@ -1,5 +1,7 @@
 # Think-Phinx
-thinkphp 6.0 phinx 数据迁移
+thinkphp 6.0 phinx 数据迁移  
+
+phinx: ~0.11.1  
 
 ## Installation
 ~~composer require nhzex/think-phinx~~
