@@ -132,11 +132,13 @@ abstract class AbstractCommand extends Command
         $config = new Config($config->get('phinx', []), $this->app->getConfigPath() . 'phinx.php');
 
         $name = app()->db->getConfig('default', 'mysql');
+        $connect = app()->db->connect($name);
         $environments = $config['environments'];
         $environments['default_database'] = $name;
         $environments[$name] = [
-            'connection' => app()->db->connect($name)->getConnection()->connect(),
-            'name' => app()->db->connect($name)->getConfig('database'),
+            'connection' => $connect->getConnection()->connect(),
+            'name' => $connect->getConfig('database'),
+            'table_prefix' => $connect->getConfig('prefix'),
         ];
         $config['environments'] = $environments;
 
