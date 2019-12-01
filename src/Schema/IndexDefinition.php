@@ -8,9 +8,33 @@
 
 namespace HZEX\Phinx\Schema;
 
-class BlueprintIndex
+class IndexDefinition
 {
     protected $options = [];
+
+    /**
+     * @param string|string[] $field
+     * @return string
+     */
+    public static function generateName($field)
+    {
+        if (is_array($field)) {
+            $name = implode('_', $field);
+        } else {
+            $name = $field;
+        }
+        return $name;
+    }
+
+    /**
+     * @var string|string[]|null
+     */
+    protected $field = null;
+
+    public function __construct($field = null)
+    {
+        $this->field = $field;
+    }
 
     /**
      * 是否唯一
@@ -68,6 +92,21 @@ class BlueprintIndex
     }
 
     /**
+     * 设置 fulltext 索引 (mysql)
+     * @param bool $enable
+     * @return $this
+     */
+    public function fulltext(bool $enable = true)
+    {
+        if (!$enable && isset($this->options['type']) && 'fulltext' === $this->options['type']) {
+            unset($this->options['type']);
+        } else {
+            $this->options['type'] = 'fulltext';
+        }
+        return $this;
+    }
+
+    /**
      * 定义表排序规则
      * @param $value
      * @return $this
@@ -78,11 +117,12 @@ class BlueprintIndex
         return $this;
     }
 
-    /**
-     * 获取列定义
-     * @return array
-     */
-    public function d()
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    public function getOptions()
     {
         return $this->options;
     }

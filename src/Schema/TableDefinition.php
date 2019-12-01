@@ -8,7 +8,7 @@
 
 namespace HZEX\Phinx\Schema;
 
-class BlueprintTable
+class TableDefinition
 {
     protected $options = [
         'id' => true,
@@ -75,7 +75,7 @@ class BlueprintTable
      * 获取列定义
      * @return array
      */
-    public function d()
+    public function getOptions()
     {
         return $this->options;
     }

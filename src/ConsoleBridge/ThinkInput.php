@@ -121,7 +121,7 @@ class ThinkInput implements InputInterface
      */
     public function hasOption($name)
     {
-        $this->input->hasOption($name);
+        return $this->input->hasOption($name);
     }
 
     /**
