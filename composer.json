@@ -29,7 +29,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Test\\Phinx\\": "tests"
+            "TestPhinx\\": "tests"
         }
     },
     "extra": {
@@ -43,7 +43,8 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "optimize-autoloader": true
     },
     "require-dev": {
         "phpunit/phpunit": "^7",

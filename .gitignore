@@ -1,9 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 /.idea
 /vendor
-/.env
+/tests/.env
+/tests/log
 /.php_cs.cache
-/config
 /.phinx
 /yarn-error.log
 /.phpunit.result.cache
