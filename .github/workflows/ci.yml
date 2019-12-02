@@ -52,5 +52,8 @@ jobs:
       - name: Run test suite
         run: composer exec -- phpunit -v
         env:
+          TESTS_DB_MYSQL_HOST: 127.0.0.1
           TESTS_DB_MYSQL_PORT: 13306
+          TESTS_DB_MYSQL_USERNAME: root
           TESTS_DB_MYSQL_PASSWORD: password
+          TESTS_DB_MYSQL_DATABASE: testing
