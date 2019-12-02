@@ -58,6 +58,6 @@
     <logging>
         <log type="coverage-html" target="tests/log/report"
             lowUpperBound="50" highLowerBound="80"/>
-        <log type="testdox-html" target="tests/log/testdox.html" />
+<!--        <log type="testdox-html" target="tests/log/testdox.html" />-->
     </logging>
 </phpunit>

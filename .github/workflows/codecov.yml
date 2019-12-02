@@ -1,0 +1,59 @@
+name: codecov
+
+on: [push]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - 7.3
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 13306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php }}
+          extension-csv: pdo, pdo_mysql, mbstring #optional, setup extensions
+          coverage: pcov #optional, setup coverage driver
+          pecl: false #optional, setup PECL
+
+      - name: Check Version
+        run: php -v && php -m && composer -V
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies (composer.lock)
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Run test suite
+        run: composer exec -- phpunit --coverage-clover=coverage.xml -v
+        env:
+          TESTS_DB_MYSQL_HOST: 127.0.0.1
+          TESTS_DB_MYSQL_PORT: 13306
+          TESTS_DB_MYSQL_USERNAME: root
+          TESTS_DB_MYSQL_PASSWORD: password
+          TESTS_DB_MYSQL_DATABASE: testing
+
+      - name: Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} #required
+          file: ./coverage.xml #optional
+          flags: unittests #optional
+          name: codecov-umbrella #optional
