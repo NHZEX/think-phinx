@@ -20,7 +20,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: testing
         ports:
-          - 3306:3306
+          - 13306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -51,3 +51,6 @@ jobs:
 
       - name: Run test suite
         run: composer exec -- phpunit -v
+        env:
+          TESTS_DB_MYSQL_PORT: 13306
+          TESTS_DB_MYSQL_PASSWORD: password
