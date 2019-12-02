@@ -2,9 +2,9 @@
 thinkphp 6.0 phinx 数据迁移  
 phinx: ~0.11.1  
 
-[![Latest Stable Version](https://poser.pugx.org/nhzex/think-phinx/v/stable)](https://packagist.org/packages/nhzex/think-blade)
-[![License](https://poser.pugx.org/nhzex/think-phinx/license)](https://packagist.org/packages/nhzex/think-blade)
-[![workflows](https://github.com/nhzex/think-phinx/workflows/ci/badge.svg)](https://github.com/NHZEX/think-blade/actions)
+[![Latest Stable Version](https://poser.pugx.org/nhzex/think-phinx/v/stable)](https://packagist.org/packages/nhzex/think-phinx)
+[![License](https://poser.pugx.org/nhzex/think-phinx/license)](https://packagist.org/packages/nhzex/think-phinx)
+[![workflows](https://github.com/nhzex/think-phinx/workflows/ci/badge.svg)](https://github.com/NHZEX/think-phinx/actions)
 [![coverage](https://codecov.io/gh/nhzex/think-phinx/graph/badge.svg)](https://codecov.io/gh/nhzex/think-phinx)
 
 ## Installation
