@@ -62,7 +62,6 @@ trait PhinxConfigBridge
                     'table_prefix' => $connection['prefix'],
                 ];
             }
-            var_dump($environments[$name]);
         }
         $config['environments'] = $environments;
         return $config;
