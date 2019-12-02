@@ -32,7 +32,7 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php }}
-          extension-csv: pdo, pdo_mysql #optional, setup extensions
+          extension-csv: pdo, pdo_mysql, mbstring #optional, setup extensions
           coverage: none #optional, setup coverage driver
           pecl: false #optional, setup PECL
 
