@@ -16,20 +16,15 @@ class Service extends \think\Service
 {
     public function register()
     {
-//        $this->commands([
-//            Breakpoint::getDefaultName() => new Breakpoint(),
-//            Status::getDefaultName()     => new Status(),
-//        ]);
-
         $this->commands([
-            new Create(),
-            new Migrate(),
-            new Rollback(),
-            new Status(),
-            new Breakpoint(),
-            new Test(),
-            new SeedCreate(),
-            new SeedRun(),
+            Create::getDefaultName()     => Create::class,
+            Migrate::getDefaultName()    => Migrate::class,
+            Rollback::getDefaultName()   => Rollback::class,
+            Status::getDefaultName()     => Status::class,
+            Breakpoint::getDefaultName() => Breakpoint::class,
+            Test::getDefaultName()       => Test::class,
+            SeedCreate::getDefaultName() => SeedCreate::class,
+            SeedRun::getDefaultName()    => SeedRun::class,
         ]);
     }
 }
