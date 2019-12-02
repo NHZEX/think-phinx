@@ -15,11 +15,12 @@
     * repository.
     -->
     <php>
+        <env name="APP_DEBUG" value="true" />
         <!-- MySQL -->
         <env name="TESTS_DB_MYSQL_ENABLED" value="true" />
         <env name="TESTS_DB_MYSQL_HOST" value="localhost" />
         <env name="TESTS_DB_MYSQL_USERNAME" value="root" />
-        <env name="TESTS_DB_MYSQL_PASSWORD" value="" />
+        <env name="TESTS_DB_MYSQL_PASSWORD" value="password" />
         <env name="TESTS_DB_MYSQL_DATABASE" value="testing" />
         <env name="TESTS_DB_MYSQL_PORT" value="3306" />
         <!-- SqlServer [ignore] -->

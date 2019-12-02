@@ -1,10 +1,13 @@
 # Think-Phinx
 thinkphp 6.0 phinx 数据迁移  
-
 phinx: ~0.11.1  
 
+[![Latest Stable Version](https://poser.pugx.org/nhzex/think-phinx/v/stable)](https://packagist.org/packages/nhzex/think-blade)
+[![License](https://poser.pugx.org/nhzex/think-phinx/license)](https://packagist.org/packages/nhzex/think-blade)
+[![workflows](https://github.com/nhzex/think-phinx/workflows/ci/badge.svg)](https://github.com/NHZEX/think-blade/actions)
+
 ## Installation
-~~composer require nhzex/think-phinx~~
+composer require nhzex/think-phinx
 
 ## Use
 ```
