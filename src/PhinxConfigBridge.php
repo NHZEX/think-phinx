@@ -31,6 +31,7 @@ trait PhinxConfigBridge
         if (!isset($environments['default_database'])) {
             $environments['default_database'] = $name;
         }
+        var_dump($db->getConfig());
         foreach ($db->getConfig('connections', []) as $name => $connection) {
             if (isset($environments[$name])) {
                 continue;

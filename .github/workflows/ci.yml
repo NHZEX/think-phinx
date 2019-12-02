@@ -9,9 +9,9 @@ jobs:
       fail-fast: false
       matrix:
         php:
+          - 7.1
           - 7.2
           - 7.3
-          - 7.4
         prefer-lowest: [false]
     services:
       mysql:
