@@ -5,8 +5,8 @@ namespace HZEX\Phinx\Command;
 
 use HZEX\Phinx\ConsoleBridge\ThinkInput;
 use HZEX\Phinx\ConsoleBridge\ThinkOutput;
+use HZEX\Phinx\PhinxConfigBridge;
 use InvalidArgumentException;
-use Phinx\Config\Config;
 use Phinx\Config\ConfigInterface;
 use Phinx\Db\Adapter\AdapterInterface;
 use Phinx\Migration\Manager;
@@ -20,6 +20,8 @@ use UnexpectedValueException;
 
 abstract class AbstractCommand extends Command
 {
+    use PhinxConfigBridge;
+
     /**
      * The location of the default migration template.
      */
@@ -94,7 +96,7 @@ abstract class AbstractCommand extends Command
     public function bootstrap(InputInterface $input, OutputInterface $output)
     {
         if (!$this->getConfig()) {
-            $this->loadConfig();
+            $this->setConfig($this->loadConfig($this->app));
         }
 
         $this->loadManager($this->inputBridge, $this->outputBridge);
@@ -119,30 +121,6 @@ abstract class AbstractCommand extends Command
         } catch (UnexpectedValueException $e) {
             // do nothing as seeds are optional
         }
-    }
-
-    /**
-     * Parse the config file and load it into the config object
-     *
-     * @return void
-     */
-    protected function loadConfig()
-    {
-        $config = $this->app->config;
-        $config = new Config($config->get('phinx', []), $this->app->getConfigPath() . 'phinx.php');
-
-        $name = app()->db->getConfig('default', 'mysql');
-        $connect = app()->db->connect($name);
-        $environments = $config['environments'];
-        $environments['default_database'] = $name;
-        $environments[$name] = [
-            'connection' => $connect->getConnection()->connect(),
-            'name' => $connect->getConfig('database'),
-            'table_prefix' => $connect->getConfig('prefix'),
-        ];
-        $config['environments'] = $environments;
-
-        $this->setConfig($config);
     }
 
     /**

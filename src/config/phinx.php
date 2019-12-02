@@ -1,12 +1,13 @@
 <?php
 
 return [
+    'adapter_mapping' => [],
     'paths' => [
         'migrations' => [
-            'DbMigrations' => './.phinx/migrations',
+            'DbMigrations' => './phinx/migrations',
         ],
         'seeds' => [
-            'DbSeeds' => './.phinx/seeds'
+            'DbSeeds' => './phinx/seeds'
         ]
     ],
     'environments' => [

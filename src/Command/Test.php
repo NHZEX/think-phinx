@@ -50,7 +50,7 @@ EOT
      */
     protected function handle(InputInterface $input, OutputInterface $output)
     {
-        $this->loadConfig();
+        $this->setConfig($this->loadConfig($this->app));
         $this->loadManager($input, $output);
 
         // Verify the migrations path(s)
