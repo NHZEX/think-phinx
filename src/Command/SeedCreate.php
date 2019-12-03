@@ -10,8 +10,6 @@ use Phinx\Util\Util;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use think\console\input\Argument as InputArgument;
 use think\console\input\Option as InputOption;
 
@@ -34,28 +32,6 @@ class SeedCreate extends AbstractCommand
                 PHP_EOL,
                 PHP_EOL
             ));
-    }
-
-    /**
-     * Get the confirmation question asking if the user wants to create the
-     * seeds directory.
-     *
-     * @return ConfirmationQuestion
-     */
-    protected function getCreateSeedDirectoryQuestion()
-    {
-        return new ConfirmationQuestion('Create seeds directory? [y]/n ', true);
-    }
-
-    /**
-     * Get the question that allows the user to select which seed path to use.
-     *
-     * @param string[] $paths
-     * @return ChoiceQuestion
-     */
-    protected function getSelectSeedPathQuestion(array $paths)
-    {
-        return new ChoiceQuestion('Which seeds path would you like to use?', $paths, 0);
     }
 
     /**

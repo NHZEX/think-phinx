@@ -13,8 +13,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use think\console\input\Argument as InputArgument;
 use think\console\input\Option as InputOption;
-use think\console\output\question\Choice as ChoiceQuestion;
-use think\console\output\question\Confirmation as ConfirmationQuestion;
 
 class Create extends AbstractCommand
 {
@@ -49,28 +47,6 @@ class Create extends AbstractCommand
 
         // Allow the migration path to be chosen non-interactively.
         $this->addOption('path', null, InputOption::VALUE_REQUIRED, 'Specify the path in which to create this migration');
-    }
-
-    /**
-     * Get the confirmation question asking if the user wants to create the
-     * migrations directory.
-     *
-     * @return ConfirmationQuestion
-     */
-    protected function getCreateMigrationDirectoryQuestion()
-    {
-        return new ConfirmationQuestion('Create migrations directory? [y]/n ', true);
-    }
-
-    /**
-     * Get the question that allows the user to select which migration path to use.
-     *
-     * @param string[] $paths
-     * @return ChoiceQuestion
-     */
-    protected function getSelectMigrationPathQuestion(array $paths)
-    {
-        return new ChoiceQuestion('Which migrations path would you like to use?', $paths, 0);
     }
 
     /**
