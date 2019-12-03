@@ -37,7 +37,10 @@ jobs:
           pecl: false #optional, setup PECL
 
       - name: Check Version
-        run: php -v && php -m && composer -V
+        run: |
+          php -v
+          php -m
+          composer -V
 
       - name: Validate composer.json and composer.lock
         run: composer validate
