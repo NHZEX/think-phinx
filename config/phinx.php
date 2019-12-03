@@ -4,10 +4,10 @@ return [
     'adapter_mapping' => [],
     'paths' => [
         'migrations' => [
-            'DbMigrations' => './phinx/migrations',
+            'DbMigrations' => 'database/migrations',
         ],
         'seeds' => [
-            'DbSeeds' => './phinx/seeds'
+            'DbSeeds' => 'database/seeds'
         ]
     ],
     'environments' => [

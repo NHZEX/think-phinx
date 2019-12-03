@@ -80,6 +80,11 @@ class Schema
 
         $schema->table->getTable()->setOptions($schema->blueprint->mergeTableOptions());
 
+        if (empty($schema->blueprint->getColumns()) && empty($schema->blueprint->getIndexs())) {
+            // TODO 待完善
+            return;
+        }
+
         foreach ($schema->blueprint->getColumns() as $column) {
             if ($column->isChange()) {
                 if ($name !== 'save') {

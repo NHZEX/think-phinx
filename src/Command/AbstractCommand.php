@@ -17,6 +17,7 @@ use think\console\Command;
 use think\console\Input;
 use think\console\Output;
 use UnexpectedValueException;
+use function HZEX\Phinx\vendor_path;
 
 abstract class AbstractCommand extends Command
 {
@@ -189,6 +190,15 @@ abstract class AbstractCommand extends Command
         }
     }
 
+    protected function getPhinxPath()
+    {
+        $path = $this->app->getRootPath() . 'vendor';
+        if (!is_dir($path)) {
+            $path = vendor_path();
+        }
+        return $path . '/robmorgan/phinx/';
+    }
+
     /**
      * Returns the migration template filename.
      *
@@ -196,7 +206,7 @@ abstract class AbstractCommand extends Command
      */
     protected function getMigrationTemplateFilename()
     {
-        return $this->app->getRootPath() . 'vendor/robmorgan/phinx/src/Phinx' . self::DEFAULT_MIGRATION_TEMPLATE;
+        return $this->getPhinxPath() . 'src/Phinx' . self::DEFAULT_MIGRATION_TEMPLATE;
     }
 
     /**
@@ -206,7 +216,7 @@ abstract class AbstractCommand extends Command
      */
     protected function getSeedTemplateFilename()
     {
-        return $this->app->getRootPath() . 'vendor/robmorgan/phinx/src/Phinx' . self::DEFAULT_SEED_TEMPLATE;
+        return $this->getPhinxPath() . 'src/Phinx' . self::DEFAULT_SEED_TEMPLATE;
     }
 
     /**

@@ -29,11 +29,12 @@
             "HZEX\\Phinx\\": "src"
         },
         "files": [
+            "src/helper.php"
         ]
     },
     "autoload-dev": {
         "psr-4": {
-            "TestPhinx\\": "tests"
+            "Test\\Phinx\\": "tests"
         }
     },
     "extra": {
@@ -42,12 +43,11 @@
                 "HZEX\\Phinx\\Service"
             ],
             "config": {
-                "phinx": "src/config/phinx.php"
+                "phinx": "config/phinx.php"
             }
         }
     },
     "config": {
-        "sort-packages": true,
-        "optimize-autoloader": true
+        "sort-packages": true
     }
 }

@@ -19,14 +19,14 @@ use RuntimeException;
  *
  * @method ColumnDefinition integer(string $name) 相当于 INTEGER
  * @method ColumnDefinition unsignedInteger(string $name) 相当于 Unsigned INTEGER
+ * @method ColumnDefinition smallInteger(string $name) 相当于 SMALLINT
+ * @method ColumnDefinition unsignedSmallInteger(string $name) 相当于 Unsigned SMALLINT
  * @method ColumnDefinition tinyInteger(string $name) 相当于 TINYINT
  * @method ColumnDefinition unsignedTinyInteger(string $name) 相当于 Unsigned TINYINT
  * @method ColumnDefinition string(string $name, int $limit) 相当于带长度的 VARCHAR
  * @method ColumnDefinition char(string $name, int $limit) 相当于带有长度的 CHAR
- * @method ColumnDefinition json(string $name) 相当于 JSON
  * @method ColumnDefinition text(string $name) 相当于 TEXT
- * @method ColumnDefinition smallInteger(string $name) 相当于 SMALLINT
- * @method ColumnDefinition unsignedSmallInteger(string $name) 相当于 Unsigned SMALLINT
+ * @method ColumnDefinition json(string $name) 相当于 JSON
  *
  * @method ColumnDefinition lockVersion() lock_version
  * @method ColumnDefinition createTime() create_time
