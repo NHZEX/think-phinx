@@ -1,5 +1,5 @@
 <?php
-namespace DbMigrations;
+namespace TestMigrations;
 
 use HZEX\Phinx\Schema;
 use Phinx\Migration\AbstractMigration;
@@ -40,22 +40,26 @@ class Init extends AbstractMigration
                 $blueprint->comment = '标签';
 
                 $blueprint->string('label', 48)->ccAscii()->comment('标签');
-                $blueprint->string('value', 255)->comment('值');
-            });
-
-            Schema::create('role', function (Schema\Blueprint $blueprint) {
-                $blueprint->comment = '角色';
-                $blueprint->unsigned = true;
-
-                $blueprint->genre()->comment('角色类型');
-                $blueprint->status()->comment('角色状态');
+                $blueprint->integer('int');
+                $blueprint->unsignedInteger('uint');
+                $blueprint->smallInteger('sint');
+                $blueprint->unsignedSmallInteger('usint');
+                $blueprint->tinyInteger('tint');
+                $blueprint->unsignedTinyInteger('utint');
+                $blueprint->string('string', 255);
+                $blueprint->char('char', 8);
+                $blueprint->text('text');
+                $blueprint->json('json');
+                $blueprint->lockVersion();
                 $blueprint->createTime();
                 $blueprint->updateTime();
                 $blueprint->deleteTime();
-                $blueprint->string('name', 32)->comment('角色名称');
-                $blueprint->string('description', 128)->comment('角色描述');
-                $blueprint->json('ext')->comment('角色权限');
-                $blueprint->lockVersion();
+                $blueprint->createBy();
+                $blueprint->updateBy();
+                $blueprint->uuid();
+                $blueprint->status();
+                $blueprint->genre();
+                $blueprint->remark();
             });
 
             Schema::create('permission', function (Schema\Blueprint $blueprint) {
@@ -67,13 +71,7 @@ class Init extends AbstractMigration
                 $blueprint->string('nkey', 128)->ccAscii()->comment('节点命名key');
                 $blueprint->string('hash', 8)->ccAscii()->comment('节点命名hash');
                 $blueprint->string('lkey', 64)->ccAscii()->comment('节点逻辑key');
-                $blueprint->unsignedTinyInteger('level')->comment('节点层级');
-                $blueprint->string('action', 32)->ccAscii()->comment('节点方法');
                 $blueprint->smallInteger('sort')->comment('节点排序')->default(255);
-                $blueprint->string('class_name', 255)->ccAscii()->comment('节点类名');
-                $blueprint->string('alias_name', 128)->comment('节点别名');
-                $blueprint->string('description', 255)->comment('节点描述');
-                $blueprint->integer('flags')->comment('选项标识');
                 $blueprint->unique('hash');
                 $blueprint->index(['pid', 'genre']);
                 $blueprint->index(['pid', 'sort']);

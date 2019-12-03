@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace TestPhinx\Migration;
+namespace Test\Phinx\Migration;
 
 use HZEX\Phinx\PhinxConfigBridge;
 use Phinx\Db\Adapter\AdapterInterface;
@@ -26,21 +26,19 @@ class ManagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->app = app();
+        $this->app    = app();
         $this->config = $this->app->config;
 
         $this->defaultDb = $this->app->db->getConfig('default');
 
         $this->config->set([
-            'paths' => [
+            'paths'         => [
                 'migrations' => [
-                    // 'DbMigrations' => './.phinx/migrations',
                 ],
-                'seeds' => [
-                    // 'DbSeeds' => './.phinx/seeds',
+                'seeds'      => [
                 ]
             ],
-            'environments' => [
+            'environments'  => [
                 'default_migration_table' => '_phinxlog',
             ],
             'version_order' => 'creation',
@@ -57,7 +55,7 @@ class ManagerTest extends TestCase
         $this->config->set([
             'paths' => [
                 'migrations' => $migrations,
-                'seeds' => $seeds,
+                'seeds'      => $seeds,
             ],
         ], 'phinx');
     }
@@ -71,60 +69,237 @@ class ManagerTest extends TestCase
         return $this->manager->getEnvironment($env ?? $this->defaultDb)->getAdapter();
     }
 
-    public function migrateCallsProvider()
+    public function testCreate()
     {
-        return [
-            ['migrate:test', [], 0],
-            ['migrate:status', [], Manager::EXIT_STATUS_DOWN],
-            ['migrate:run', [], 0],
-            ['migrate:status', [], 0],
-            ['migrate:rollback', ['-t', '0'], 0],
-            ['migrate:status', [], Manager::EXIT_STATUS_DOWN],
-        ];
+        $tmp = sys_get_temp_dir() . '/_test/';
+        @mkdir($tmp . 'migrations');
+        @mkdir($tmp . 'seeds');
+        $this->setPhinxPaths($tmp . 'migrations', $tmp . 'seeds');
+
+        foreach (glob($tmp . '*/*.php') as $file) {
+            @unlink($file);
+        }
+
+        $this->call('migrate:create', ['TestMigration'], $exitCode, 'console');
+        $this->assertEquals(0, $exitCode, "call migrate:create fail");
+
+        $this->assertTrue(glob($tmp . 'migrations/*_test_migration.php') >= 1);
+
+        $this->call('seed:create', ['SeedMigration'], $exitCode, 'console');
+        $this->assertEquals(0, $exitCode, "call seed:create fail");
+
+        $this->assertTrue(is_file($tmp . 'seeds/SeedMigration.php'));
+    }
+
+    public function testMigrate()
+    {
+        $this->setPhinxPaths(__DIR__ . '/../_files/reversiblemigrations', __DIR__ . '/../_files/empty_seed');
+        $this->callMigrate('test', [], 0, 'console');
     }
 
     /**
-     * @dataProvider migrateCallsProvider
-     * @param $command
-     * @param $args
-     * @param $code
      */
-    public function testMigrateConsole(string $command, array $args, int $code)
+    public function testReversibleMigrationsWorkAsExpected()
     {
         $this->setPhinxPaths(__DIR__ . '/../_files/reversiblemigrations', __DIR__ . '/../_files/empty_seed');
 
-        $this->call($command, $args, $exitCode, 'console');
-        $this->assertEquals($code, $exitCode, "call {$command} fail");
+        $adapter = $this->getAdapter();
+        $adapter->dropDatabase($adapter->getOption('name'));
+        $adapter->createDatabase($adapter->getOption('name'));
+        $adapter->disconnect();
+
+        $this->callMigrate('status', [], Manager::EXIT_STATUS_DOWN);
+
+        $this->callMigrate('run', ['-e', 'main'], 0);
+
+        $this->callMigrate('status', [], 0);
+
+        // ensure up migrations worked
+        $this->assertFalse($adapter->hasTable('info'));
+        $this->assertTrue($adapter->hasTable('statuses'));
+        $this->assertTrue($adapter->hasTable('users'));
+        $this->assertTrue($adapter->hasTable('just_logins'));
+        $this->assertFalse($adapter->hasTable('user_logins'));
+        $this->assertTrue($adapter->hasColumn('users', 'biography'));
+        $this->assertTrue($adapter->hasForeignKey('just_logins', ['user_id']));
+        $this->assertTrue($adapter->hasTable('change_direction_test'));
+        $this->assertTrue($adapter->hasColumn('change_direction_test', 'subthing'));
+        $this->assertEquals(
+            count($adapter->fetchAll('SELECT * FROM change_direction_test WHERE subthing IS NOT NULL')),
+            2
+        );
+
+        // revert all changes to the first
+        $this->callMigrate('rollback', ['-t', '20121213232502'], 0);
+
+        // ensure reversed migrations worked
+        $this->assertTrue($adapter->hasTable('info'));
+        $this->assertFalse($adapter->hasTable('statuses'));
+        $this->assertFalse($adapter->hasTable('user_logins'));
+        $this->assertFalse($adapter->hasTable('just_logins'));
+        $this->assertTrue($adapter->hasColumn('users', 'bio'));
+        $this->assertFalse($adapter->hasForeignKey('user_logins', ['user_id']));
+        $this->assertFalse($adapter->hasTable('change_direction_test'));
+
+        // revert all changes to the first
+        $this->callMigrate('rollback', ['-t', '0'], 0);
+
+        $this->callMigrate('status', [], Manager::EXIT_STATUS_DOWN);
     }
 
+
     /**
-     * @dataProvider migrateCallsProvider
-     * @param $command
-     * @param $args
-     * @param $code
      */
-    public function testMigrateConsole2(string $command, array $args, int $code)
+    public function testReversibleMigrationWithIndexConflict()
     {
         $this->setPhinxPaths(__DIR__ . '/../_files/drop_index_regression', __DIR__ . '/../_files/empty_seed');
 
-        $this->call($command, $args, $exitCode, 'console');
-        $this->assertEquals($code, $exitCode, "call {$command} fail");
+        $adapter = $this->getAdapter();
+        $adapter->dropDatabase($adapter->getOption('name'));
+        $adapter->createDatabase($adapter->getOption('name'));
+        $adapter->disconnect();
+
+        $this->callMigrate('run', []);
+
+        // ensure up migrations worked
+        $this->assertTrue($adapter->hasTable('my_table'));
+        $this->assertTrue($adapter->hasTable('my_other_table'));
+        $this->assertTrue($adapter->hasColumn('my_table', 'entity_id'));
+        $this->assertTrue($adapter->hasForeignKey('my_table', ['entity_id']));
+
+        // revert all changes to the first
+        $this->callMigrate('rollback', ['-t', '20121213232502']);
+
+        // ensure reversed migrations worked
+        $this->assertTrue($adapter->hasTable('my_table'));
+        $this->assertTrue($adapter->hasTable('my_other_table'));
+        $this->assertTrue($adapter->hasColumn('my_table', 'entity_id'));
+        $this->assertFalse($adapter->hasForeignKey('my_table', ['entity_id']));
+        $this->assertFalse($adapter->hasIndex('my_table', ['entity_id']));
+    }
+
+    public function testReversibleMigrationsWorkAsExpectedWithNamespace()
+    {
+        $this->setPhinxPaths([
+            'Foo\Bar' => __DIR__ . '/../_files_foo_bar/reversiblemigrations'
+        ], __DIR__ . '/../_files/empty_seed');
+
+        $adapter = $this->getAdapter();
+        $adapter->dropDatabase($adapter->getOption('name'));
+        $adapter->createDatabase($adapter->getOption('name'));
+        $adapter->disconnect();
+
+        // migrate to the latest version
+        $this->callMigrate('run');
+
+        // ensure up migrations worked
+        $this->assertFalse($adapter->hasTable('info_foo_bar'));
+        $this->assertTrue($adapter->hasTable('statuses_foo_bar'));
+        $this->assertTrue($adapter->hasTable('users_foo_bar'));
+        $this->assertTrue($adapter->hasTable('user_logins_foo_bar'));
+        $this->assertTrue($adapter->hasColumn('users_foo_bar', 'biography'));
+        $this->assertTrue($adapter->hasForeignKey('user_logins_foo_bar', ['user_id']));
+
+        // revert all changes to the first
+        $this->callMigrate('rollback', ['-t', '20161213232502']);
+
+        // ensure reversed migrations worked
+        $this->assertTrue($adapter->hasTable('info_foo_bar'));
+        $this->assertFalse($adapter->hasTable('statuses_foo_bar'));
+        $this->assertFalse($adapter->hasTable('user_logins_foo_bar'));
+        $this->assertTrue($adapter->hasColumn('users_foo_bar', 'bio'));
+        $this->assertFalse($adapter->hasForeignKey('user_logins_foo_bar', ['user_id']));
     }
 
     /**
-     * @dataProvider migrateCallsProvider
-     * @param $command
-     * @param $args
-     * @param $code
      */
-    public function testMigrateSchema(string $command, array $args, int $code)
+    public function testMigrateSchema()
     {
         $this->setPhinxPaths([
-            'DbMigrations' => __DIR__ . '/../_files/schema_definition',
+            'TestMigrations' => __DIR__ . '/../_files/schema_definition',
         ], __DIR__ . '/../_files/empty_seed');
 
-        $this->call($command, $args, $exitCode, 'console');
-        $this->assertEquals($code, $exitCode, "call {$command} fail");
+        $adapter = $this->getAdapter();
+        $adapter->dropDatabase($adapter->getOption('name'));
+        $adapter->createDatabase($adapter->getOption('name'));
+        $adapter->disconnect();
+
+        $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334'], 0);
+
+        $this->assertTrue($adapter->hasTable('system'));
+        $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
+        $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
+        $this->assertEquals(21, \count($adapter->getColumns('system')));
+        $this->assertTrue($adapter->hasIndexByName('permission', 'hash'));
+
+        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334'], 0);
+
+        $this->callMigrate('run', ['-e', 'main'], 0);
+
+        $this->assertFalse($adapter->hasIndexByName('permission', 'hash'));
+        $this->assertTrue($adapter->hasIndexByName('permission', 'name'));
+        $column = null;
+        foreach ($adapter->getColumns('system') as $column) {
+            if ('string' === $column->getName()) {
+                break;
+            }
+        }
+        $this->assertTrue(isset($column));
+        $this->assertTrue('string' === $column->getName());
+        $this->assertTrue(512 === $column->getLimit());
+
+        $this->callMigrate('rollback', ['-t', '0'], 0);
+
+        $this->assertFalse($adapter->hasIndexByName('permission', 'name'));
+        $this->assertTrue($adapter->hasTable('system'));
+
+        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334', '--unset'], 0);
+        $this->callMigrate('rollback', ['-t', '0'], 0);
+
+        $this->assertFalse($adapter->hasTable('system'));
+    }
+
+    /**
+     */
+    public function testSeeds()
+    {
+        $this->setPhinxPaths([
+            __DIR__ . '/../_files/seeds_test_migration',
+        ], [
+            __DIR__ . '/../_files/seeds_test'
+        ]);
+
+        $adapter = $this->getAdapter();
+        $adapter->dropDatabase($adapter->getOption('name'));
+        $adapter->createDatabase($adapter->getOption('name'));
+        $adapter->disconnect();
+
+        $this->callMigrate('run');
+        $this->callSeed('run');
+    }
+
+    /**
+     * @param string $name
+     * @param array  $parameters
+     * @param int    $successCode
+     * @param string $driver
+     */
+    public function callMigrate(string $name, array $parameters = [], $successCode = 0, string $driver = 'console')
+    {
+        $this->call('migrate:' . $name, $parameters, $exitCode, $driver);
+        $this->assertEquals($successCode, $exitCode, "call migrate:{$name} fail");
+    }
+
+    /**
+     * @param string $name
+     * @param array  $parameters
+     * @param int    $successCode
+     * @param string $driver
+     */
+    public function callSeed(string $name, array $parameters = [], $successCode = 0, string $driver = 'console')
+    {
+        $this->call('seed:' . $name, $parameters, $exitCode, $driver);
+        $this->assertEquals($successCode, $exitCode, "call seed:{$name} fail");
     }
 
     /**

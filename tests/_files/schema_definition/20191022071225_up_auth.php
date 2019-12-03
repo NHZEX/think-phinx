@@ -1,6 +1,6 @@
 <?php
 
-namespace DbMigrations;
+namespace TestMigrations;
 
 use HZEX\Phinx\Schema;
 use Phinx\Migration\AbstractMigration;
@@ -29,8 +29,8 @@ class UpAuth extends AbstractMigration
                 $blueprint->index('name')->limit(64);
             });
 
-            Schema::save('role', function (Schema\Blueprint $blueprint) {
-                $blueprint->string('description', 512)->comment('修改列')->change();
+            Schema::save('system', function (Schema\Blueprint $blueprint) {
+                $blueprint->string('string', 512)->comment('修改列')->change();
             });
         });
     }
@@ -40,5 +40,11 @@ class UpAuth extends AbstractMigration
      */
     public function down()
     {
+        Schema::cxt($this, function () {
+            Schema::save('permission', function (Schema\Blueprint $blueprint) {
+                $blueprint->table->removeIndexByName('name');
+                $blueprint->table->save();
+            });
+        });
     }
 }
