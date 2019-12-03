@@ -25,15 +25,16 @@ composer require nhzex/think-phinx
 ``` 
 
 ## Config
+使用前请确保配置文件中定义的目录是有效的
 ```php
 <?php
 return [
     'paths' => [
         'migrations' => [
-            'DbMigrations' => './.phinx/migrations',
+            'DbMigrations' => 'database/migrations',
         ],
         'seeds' => [
-            'DbSeeds' => './.phinx/seeds'
+            'DbSeeds' => 'database/seeds'
         ]
     ],
     'environments' => [
