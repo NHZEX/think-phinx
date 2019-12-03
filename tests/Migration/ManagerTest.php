@@ -72,13 +72,12 @@ class ManagerTest extends TestCase
     public function testCreate()
     {
         $tmp = sys_get_temp_dir() . '/_test/';
-        @mkdir($tmp . 'migrations');
-        @mkdir($tmp . 'seeds');
-        $this->setPhinxPaths($tmp . 'migrations', $tmp . 'seeds');
-
         foreach (glob($tmp . '*/*.php') as $file) {
             @unlink($file);
         }
+        @mkdir($tmp . 'migrations');
+        @mkdir($tmp . 'seeds');
+        $this->setPhinxPaths($tmp . 'migrations', $tmp . 'seeds');
 
         $this->call('migrate:create', ['TestMigration'], $exitCode, 'console');
         $this->assertEquals(0, $exitCode, "call migrate:create fail");
