@@ -11,6 +11,11 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use think\console\Input;
 use think\console\Output;
+use function app;
+use function count;
+use function mkdir;
+use function sys_get_temp_dir;
+use function unlink;
 
 class ManagerTest extends TestCase
 {
@@ -75,8 +80,8 @@ class ManagerTest extends TestCase
         foreach (glob($tmp . '*/*.php') as $file) {
             @unlink($file);
         }
-        @mkdir($tmp . 'migrations');
-        @mkdir($tmp . 'seeds');
+        @mkdir($tmp . 'migrations', 0755, true);
+        @mkdir($tmp . 'seeds', 0755, true);
         $this->setPhinxPaths($tmp . 'migrations', $tmp . 'seeds');
 
         $this->call('migrate:create', ['TestMigration'], $exitCode, 'console');
@@ -123,6 +128,7 @@ class ManagerTest extends TestCase
         $this->assertTrue($adapter->hasForeignKey('just_logins', ['user_id']));
         $this->assertTrue($adapter->hasTable('change_direction_test'));
         $this->assertTrue($adapter->hasColumn('change_direction_test', 'subthing'));
+        /** @noinspection SqlResolve */
         $this->assertEquals(
             count($adapter->fetchAll('SELECT * FROM change_direction_test WHERE subthing IS NOT NULL')),
             2
@@ -228,7 +234,7 @@ class ManagerTest extends TestCase
         $this->assertTrue($adapter->hasTable('system'));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
-        $this->assertEquals(21, \count($adapter->getColumns('system')));
+        $this->assertEquals(21, count($adapter->getColumns('system')));
         $this->assertTrue($adapter->hasIndexByName('permission', 'hash'));
 
         $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334'], 0);

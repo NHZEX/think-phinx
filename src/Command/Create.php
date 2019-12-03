@@ -97,9 +97,6 @@ class Create extends AbstractCommand
             throw new Exception('No migration paths set in your Phinx configuration file.');
         }
 
-        dump($paths);
-        dump(is_dir($paths));
-
         $paths = Util::globAll($paths);
 
         if (empty($paths)) {
