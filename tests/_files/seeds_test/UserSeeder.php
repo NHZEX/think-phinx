@@ -1,5 +1,7 @@
 <?php
 
+namespace TestSeedTests;
+
 use Phinx\Seed\AbstractSeed;
 
 class UserSeeder extends AbstractSeed

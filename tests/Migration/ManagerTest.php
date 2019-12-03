@@ -264,9 +264,9 @@ class ManagerTest extends TestCase
     public function testSeeds()
     {
         $this->setPhinxPaths([
-            __DIR__ . '/../_files/seeds_test_migration',
+            'TestSeedTests' => __DIR__ . '/../_files/seeds_test_migration',
         ], [
-            __DIR__ . '/../_files/seeds_test'
+            'TestSeedTests' => __DIR__ . '/../_files/seeds_test'
         ]);
 
         $adapter = $this->getAdapter();

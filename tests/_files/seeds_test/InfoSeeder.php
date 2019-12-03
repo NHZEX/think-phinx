@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+namespace TestSeedTests;
+
 class InfoSeeder extends \Phinx\Seed\AbstractSeed
 {
     public function run()
