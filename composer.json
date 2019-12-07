@@ -5,7 +5,7 @@
     "keywords": [
         "thinkphp",
         "thinkphp6",
-        "blade"
+        "phinx"
     ],
     "license": "Apache-2.0",
     "authors": [
