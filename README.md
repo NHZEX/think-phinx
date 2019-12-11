@@ -10,6 +10,10 @@ phinx: ~0.11.1
 ## Installation
 composer require nhzex/think-phinx
 
+## Warning
+
+目前版本的`phinx`将导致`env`函数被覆盖。如果使用到该函数，请在`composer`加载前重新声明。([phinx#1647](https://github.com/cakephp/phinx/issues/1647))
+
 ## Use
 ```
  migrate
@@ -47,5 +51,5 @@ return [
 
 ## Doc
 - [Phinx CN](https://tsy12321.gitbooks.io/phinx-doc/content)
-- [Phinx EN](http://docs.phinx.org/en/latest)
-- [Phinx CakePHP](https://book.cakephp.org/3/en/phinx.html)
+- [Phinx EN](https://book.cakephp.org/3/en/phinx.html)
+- [Phinx Old](http://docs.phinx.org/en/latest)
