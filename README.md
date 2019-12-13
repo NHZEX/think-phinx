@@ -1,6 +1,6 @@
 # Think-Phinx
 thinkphp 6.0 phinx 数据迁移  
-phinx: ~0.11.1  
+phinx: ~0.11.3  
 
 [![Latest Stable Version](https://poser.pugx.org/nhzex/think-phinx/v/stable)](https://packagist.org/packages/nhzex/think-phinx)
 [![License](https://poser.pugx.org/nhzex/think-phinx/license)](https://packagist.org/packages/nhzex/think-phinx)
@@ -29,7 +29,7 @@ composer require nhzex/think-phinx
 ``` 
 
 ## Config
-使用前请确保配置文件中定义的目录是有效的
+请确保配置文件中指定的目录存在且可读
 ```php
 <?php
 return [
