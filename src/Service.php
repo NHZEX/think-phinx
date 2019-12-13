@@ -17,14 +17,15 @@ class Service extends \think\Service
     public function register()
     {
         $this->commands([
-            Create::getDefaultName()     => Create::class,
-            Migrate::getDefaultName()    => Migrate::class,
-            Rollback::getDefaultName()   => Rollback::class,
-            Status::getDefaultName()     => Status::class,
-            Breakpoint::getDefaultName() => Breakpoint::class,
-            Test::getDefaultName()       => Test::class,
-            SeedCreate::getDefaultName() => SeedCreate::class,
-            SeedRun::getDefaultName()    => SeedRun::class,
+            Create::getDefaultName()      => Create::class,
+            Migrate::getDefaultName()     => Migrate::class,
+            Rollback::getDefaultName()    => Rollback::class,
+            Status::getDefaultName()      => Status::class,
+            Breakpoint::getDefaultName()  => Breakpoint::class,
+            Test::getDefaultName()        => Test::class,
+            SeedCreate::getDefaultName()  => SeedCreate::class,
+            SeedRun::getDefaultName()     => SeedRun::class,
+            // ListAliases::getDefaultName() => ListAliases::class,
         ]);
     }
 }
