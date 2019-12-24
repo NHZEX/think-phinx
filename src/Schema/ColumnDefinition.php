@@ -15,6 +15,8 @@ use think\helper\Str;
 /**
  * 字段构造增强
  * Class Blueprint
+ * @method ColumnDefinition unsignedBigInteger(string $name) static 相当于 Unsigned BIGINT
+ * @method ColumnDefinition bigInteger(string $name) static 相当于 BIGINT
  * @method ColumnDefinition integer(string $name) static 相当于 INTEGER
  * @method ColumnDefinition unsignedInteger(string $name) static 相当于 Unsigned INTEGER
  * @method ColumnDefinition tinyInteger(string $name) static 相当于 TINYINT
@@ -53,12 +55,14 @@ class ColumnDefinition
     ];
 
     const MAPPING = [
-        'integer'      => [Adapter::PHINX_TYPE_INTEGER, 4294967295], // INT_REGULAR
-        'smallInteger' => [Adapter::PHINX_TYPE_INTEGER, 65535], // INT_SMALL
+        'bigInteger'   => [Adapter::PHINX_TYPE_BIG_INTEGER, null], // INT_REGULAR
+        'integer'      => [Adapter::PHINX_TYPE_INTEGER, null], // INT_REGULAR
+        'smallInteger' => [Adapter::PHINX_TYPE_SMALL_INTEGER, null], // INT_SMALL
         'tinyInteger'  => [Adapter::PHINX_TYPE_INTEGER, 255], // INT_TINY
 
-        'unsignedInteger'      => [Adapter::PHINX_TYPE_INTEGER, 4294967295], // INT_REGULAR
-        'unsignedSmallInteger' => [Adapter::PHINX_TYPE_INTEGER, 65535], // INT_SMALL
+        'unsignedBigInteger'   => [Adapter::PHINX_TYPE_BIG_INTEGER, null], // INT_REGULAR
+        'unsignedInteger'      => [Adapter::PHINX_TYPE_INTEGER, null], // INT_REGULAR
+        'unsignedSmallInteger' => [Adapter::PHINX_TYPE_SMALL_INTEGER, null], // INT_SMALL
         'unsignedTinyInteger'  => [Adapter::PHINX_TYPE_INTEGER, 255], // INT_TINY
 
         'string' => [Adapter::PHINX_TYPE_STRING, 255], // TEXT_TINY
@@ -119,11 +123,13 @@ class ColumnDefinition
 
         // 按需设置
         switch ($callName) {
+            case 'bigInteger':
             case 'integer':
             case 'smallInteger':
             case 'tinyInteger':
                 $column->setDefault(0);
                 break;
+            case 'unsignedBigInteger':
             case 'unsignedInteger':
             case 'unsignedSmallInteger':
             case 'unsignedTinyInteger':
