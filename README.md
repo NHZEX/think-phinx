@@ -50,6 +50,6 @@ return [
 ```
 
 ## Doc
+- [Phinx EN](https://book.cakephp.org/phinx)
 - [Phinx CN](https://tsy12321.gitbooks.io/phinx-doc/content)
-- [Phinx EN](https://book.cakephp.org/3/en/phinx.html)
 - [Phinx Old](http://docs.phinx.org/en/latest)
