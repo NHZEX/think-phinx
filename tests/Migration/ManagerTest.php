@@ -112,7 +112,7 @@ class ManagerTest extends TestCase
         $adapter->createDatabase($adapter->getOption('name'));
         $adapter->disconnect();
 
-        $this->callMigrate('status', [], Manager::EXIT_STATUS_DOWN);
+        $this->callMigrate('status', [], 0);
 
         $this->callMigrate('run', ['-e', 'main'], 0);
 
@@ -149,7 +149,7 @@ class ManagerTest extends TestCase
         // revert all changes to the first
         $this->callMigrate('rollback', ['-t', '0'], 0);
 
-        $this->callMigrate('status', [], Manager::EXIT_STATUS_DOWN);
+        $this->callMigrate('status', [], 0);
     }
 
 

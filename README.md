@@ -1,6 +1,6 @@
 # Think-Phinx
 thinkphp 6.0 phinx 数据迁移  
-phinx: ~0.11.3  
+phinx: ~0.11.4  
 
 [![Latest Stable Version](https://poser.pugx.org/nhzex/think-phinx/v/stable)](https://packagist.org/packages/nhzex/think-phinx)
 [![License](https://poser.pugx.org/nhzex/think-phinx/license)](https://packagist.org/packages/nhzex/think-phinx)
