@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Test\Phinx\Migration;
 
 use HZEX\Phinx\PhinxConfigBridge;
+use Phinx\Console\Command\AbstractCommand;
 use Phinx\Db\Adapter\AdapterInterface;
 use Phinx\Migration\Manager;
 use PHPUnit\Framework\TestCase;
@@ -98,7 +99,7 @@ class ManagerTest extends TestCase
     public function testMigrate()
     {
         $this->setPhinxPaths(__DIR__ . '/../_files/reversiblemigrations', __DIR__ . '/../_files/empty_seed');
-        $this->callMigrate('test', [], 0, 'console');
+        $this->callMigrate('test', [], AbstractCommand::CODE_SUCCESS, 'console');
     }
 
     /**
@@ -112,11 +113,11 @@ class ManagerTest extends TestCase
         $adapter->createDatabase($adapter->getOption('name'));
         $adapter->disconnect();
 
-        $this->callMigrate('status', [], 0);
+        $this->callMigrate('status', [], AbstractCommand::CODE_SUCCESS);
 
-        $this->callMigrate('run', ['-e', 'main'], 0);
+        $this->callMigrate('run', ['-e', 'main'], AbstractCommand::CODE_SUCCESS);
 
-        $this->callMigrate('status', [], 0);
+        $this->callMigrate('status', [], AbstractCommand::CODE_SUCCESS);
 
         // ensure up migrations worked
         $this->assertFalse($adapter->hasTable('info'));
@@ -128,14 +129,15 @@ class ManagerTest extends TestCase
         $this->assertTrue($adapter->hasForeignKey('just_logins', ['user_id']));
         $this->assertTrue($adapter->hasTable('change_direction_test'));
         $this->assertTrue($adapter->hasColumn('change_direction_test', 'subthing'));
-        /** @noinspection SqlResolve */
+        /** @noinspection SqlDialectInspection */
+        /** @noinspection SqlNoDataSourceInspection */
         $this->assertEquals(
             count($adapter->fetchAll('SELECT * FROM change_direction_test WHERE subthing IS NOT NULL')),
             2
         );
 
         // revert all changes to the first
-        $this->callMigrate('rollback', ['-t', '20121213232502'], 0);
+        $this->callMigrate('rollback', ['-t', '20121213232502'], AbstractCommand::CODE_SUCCESS);
 
         // ensure reversed migrations worked
         $this->assertTrue($adapter->hasTable('info'));
@@ -147,9 +149,9 @@ class ManagerTest extends TestCase
         $this->assertFalse($adapter->hasTable('change_direction_test'));
 
         // revert all changes to the first
-        $this->callMigrate('rollback', ['-t', '0'], 0);
+        $this->callMigrate('rollback', ['-t', '0'], AbstractCommand::CODE_SUCCESS);
 
-        $this->callMigrate('status', [], 0);
+        $this->callMigrate('status', [], AbstractCommand::CODE_SUCCESS);
     }
 
 
@@ -229,7 +231,7 @@ class ManagerTest extends TestCase
         $adapter->createDatabase($adapter->getOption('name'));
         $adapter->disconnect();
 
-        $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334'], 0);
+        $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334'], AbstractCommand::CODE_SUCCESS);
 
         $this->assertTrue($adapter->hasTable('system'));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
@@ -237,9 +239,9 @@ class ManagerTest extends TestCase
         $this->assertEquals(21, count($adapter->getColumns('system')));
         $this->assertTrue($adapter->hasIndexByName('permission', 'hash'));
 
-        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334'], 0);
+        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334'], AbstractCommand::CODE_SUCCESS);
 
-        $this->callMigrate('run', ['-e', 'main'], 0);
+        $this->callMigrate('run', ['-e', 'main'], AbstractCommand::CODE_SUCCESS);
 
         $this->assertFalse($adapter->hasIndexByName('permission', 'hash'));
         $this->assertTrue($adapter->hasIndexByName('permission', 'name'));
@@ -253,13 +255,13 @@ class ManagerTest extends TestCase
         $this->assertTrue('string' === $column->getName());
         $this->assertTrue(512 === $column->getLimit());
 
-        $this->callMigrate('rollback', ['-t', '0'], 0);
+        $this->callMigrate('rollback', ['-t', '0'], AbstractCommand::CODE_SUCCESS);
 
         $this->assertFalse($adapter->hasIndexByName('permission', 'name'));
         $this->assertTrue($adapter->hasTable('system'));
 
-        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334', '--unset'], 0);
-        $this->callMigrate('rollback', ['-t', '0'], 0);
+        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334', '--unset'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('rollback', ['-t', '0'], AbstractCommand::CODE_SUCCESS);
 
         $this->assertFalse($adapter->hasTable('system'));
     }
@@ -289,7 +291,7 @@ class ManagerTest extends TestCase
      * @param int    $successCode
      * @param string $driver
      */
-    public function callMigrate(string $name, array $parameters = [], $successCode = 0, string $driver = 'console')
+    public function callMigrate(string $name, array $parameters = [], $successCode = AbstractCommand::CODE_SUCCESS, string $driver = 'console')
     {
         $this->call('migrate:' . $name, $parameters, $exitCode, $driver);
         $this->assertEquals($successCode, $exitCode, "call migrate:{$name} fail");
@@ -301,7 +303,7 @@ class ManagerTest extends TestCase
      * @param int    $successCode
      * @param string $driver
      */
-    public function callSeed(string $name, array $parameters = [], $successCode = 0, string $driver = 'console')
+    public function callSeed(string $name, array $parameters = [], $successCode = AbstractCommand::CODE_SUCCESS, string $driver = 'console')
     {
         $this->call('seed:' . $name, $parameters, $exitCode, $driver);
         $this->assertEquals($successCode, $exitCode, "call seed:{$name} fail");
@@ -313,6 +315,7 @@ class ManagerTest extends TestCase
      * @param int    $exitCode
      * @param string $driver
      * @return Output
+     * @noinspection PhpDocMissingThrowsInspection
      */
     public function call(string $command, array $parameters = [], &$exitCode = 0, string $driver = 'buffer')
     {
@@ -323,6 +326,7 @@ class ManagerTest extends TestCase
 
         $this->app->console->setCatchExceptions(false);
         $this->app->console->setAutoExit(false);
+        /** @noinspection PhpUnhandledExceptionInspection */
         $exitCode = $this->app->console->find($command)->run($input, $output);
 
         // buffer->fetch()
