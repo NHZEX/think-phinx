@@ -81,8 +81,9 @@ class Schema
         $schema->table->getTable()->setOptions($schema->blueprint->mergeTableOptions());
 
         if (empty($schema->blueprint->getColumns()) && empty($schema->blueprint->getIndexs())) {
-            // TODO 待完善
-            return;
+            if ($name === 'create') {
+                throw new RuntimeException('blueprint is empty by create: ' . $column->getName());
+            }
         }
 
         foreach ($schema->blueprint->getColumns() as $column) {
