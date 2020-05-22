@@ -231,7 +231,7 @@ class ManagerTest extends TestCase
         $adapter->createDatabase($adapter->getOption('name'));
         $adapter->disconnect();
 
-        $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334', ], AbstractCommand::CODE_SUCCESS);
 
         $this->assertTrue($adapter->hasTable('system'));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
@@ -241,7 +241,7 @@ class ManagerTest extends TestCase
 
         $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334'], AbstractCommand::CODE_SUCCESS);
 
-        $this->callMigrate('run', ['-e', 'main'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('run', ['-e', 'main', '-t', '20191022071225'], AbstractCommand::CODE_SUCCESS);
 
         $this->assertFalse($adapter->hasIndexByName('permission', 'hash'));
         $this->assertTrue($adapter->hasIndexByName('permission', 'name'));
@@ -254,6 +254,16 @@ class ManagerTest extends TestCase
         $this->assertTrue(isset($column));
         $this->assertTrue('string' === $column->getName());
         $this->assertTrue(512 === $column->getLimit());
+
+        $this->callMigrate('run', ['-e', 'main', '-t', '20200522035054'], AbstractCommand::CODE_SUCCESS);
+
+        $this->assertFalse($adapter->hasColumn('system', 'text'));
+        $this->assertFalse($adapter->hasColumn('system', 'json'));
+
+        $this->callMigrate('rollback', ['-t', '20191022071225'], AbstractCommand::CODE_SUCCESS);
+
+        $this->assertTrue($adapter->hasColumn('system', 'text'));
+        $this->assertTrue($adapter->hasColumn('system', 'json'));
 
         $this->callMigrate('rollback', ['-t', '0'], AbstractCommand::CODE_SUCCESS);
 
