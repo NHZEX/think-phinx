@@ -28,7 +28,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extension: pdo, pdo_mysql, mbstring #optional, setup extensions
+          extensions: pdo, pdo_mysql, mbstring #optional, setup extensions
           coverage: pcov #optional, setup coverage driver
           pecl: false #optional, setup PECL
 
