@@ -11,10 +11,13 @@ namespace HZEX\Phinx\Schema;
 use Phinx\Db\Adapter\AdapterInterface as Adapter;
 use Phinx\Db\Table\Column;
 use think\helper\Str;
+use function array_pad;
 
 /**
  * 字段构造增强
  * Class Blueprint
+ * @method ColumnDefinition column(string $type, string $name) static
+ *
  * @method ColumnDefinition unsignedBigInteger(string $name) static 相当于 Unsigned BIGINT
  * @method ColumnDefinition bigInteger(string $name) static 相当于 BIGINT
  * @method ColumnDefinition integer(string $name) static 相当于 INTEGER
@@ -25,6 +28,7 @@ use think\helper\Str;
  * @method ColumnDefinition char(string $name, int $limit) static 相当于带有长度的 CHAR
  * @method ColumnDefinition json(string $name) static 相当于 JSON
  * @method ColumnDefinition text(string $name) static 相当于 TEXT
+ * @method ColumnDefinition blob(string $name) static 相当于 BLOB
  * @method ColumnDefinition smallInteger(string $name) static 相当于 SMALLINT
  * @method ColumnDefinition unsignedSmallInteger(string $name) static 相当于 Unsigned SMALLINT
  *
@@ -68,6 +72,7 @@ class ColumnDefinition
         'string' => [Adapter::PHINX_TYPE_STRING, 255], // TEXT_TINY
         'char'   => [Adapter::PHINX_TYPE_CHAR, null],
         'text'   => [Adapter::PHINX_TYPE_TEXT, null],
+        'blob'   => [Adapter::PHINX_TYPE_BLOB, null],
         'json'   => [Adapter::PHINX_TYPE_JSON, null],
 
         'lockVersion' => [Adapter::PHINX_TYPE_INTEGER, 4294967295],
@@ -101,15 +106,21 @@ class ColumnDefinition
 
     public static function make($callName, $arguments)
     {
-        [$name, $arg1] = array_pad($arguments, 2, null);
+        if ($callName === 'column') {
+            $type = $arguments[0];
+            $name = $arguments[1];
+            $limit = null;
+            $arg1 = null;
+        } else {
+            [$name, $arg1] = array_pad($arguments, 2, null);
+            /**
+             * $name == null : field
+             * $name <> null : type
+             */
+            $name = $name ?? Str::snake($callName);
+            [$type, $limit] = self::MAPPING[$callName];
+        }
 
-        /**
-         * $name == null : field
-         * $name <> null : type
-         */
-        $name = $name ?? Str::snake($callName);
-
-        [$type, $limit] = self::MAPPING[$callName];
 
         $column = new Column();
         $column->setName($name);

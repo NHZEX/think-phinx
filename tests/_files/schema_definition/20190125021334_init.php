@@ -66,6 +66,8 @@ class Init extends AbstractMigration
                 $blueprint->comment = '权限';
                 $blueprint->unsigned = true;
 
+                $blueprint->column('blob', 'blob1');
+                $blueprint->blob('blob2');
                 $blueprint->unsignedInteger('pid')->comment('父节点ID');
                 $blueprint->genre()->comment('节点类型');
                 $blueprint->string('nkey', 128)->ccAscii()->comment('节点命名key');

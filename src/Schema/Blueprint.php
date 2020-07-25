@@ -17,6 +17,8 @@ use RuntimeException;
  * @property-write string       $comment    定义表注释
  * @property-write string       $collation  定义表排序规则
  *
+ * @method ColumnDefinition column(string $type, string $name)
+ *
  * @method ColumnDefinition integer(string $name) 相当于 INTEGER
  * @method ColumnDefinition unsignedInteger(string $name) 相当于 Unsigned INTEGER
  * @method ColumnDefinition smallInteger(string $name) 相当于 SMALLINT
@@ -26,6 +28,7 @@ use RuntimeException;
  * @method ColumnDefinition string(string $name, int $limit) 相当于带长度的 VARCHAR
  * @method ColumnDefinition char(string $name, int $limit) 相当于带有长度的 CHAR
  * @method ColumnDefinition text(string $name) 相当于 TEXT
+ * @method ColumnDefinition blob(string $name) 相当于 BLOB
  * @method ColumnDefinition json(string $name) 相当于 JSON
  *
  * @method ColumnDefinition lockVersion() lock_version

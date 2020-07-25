@@ -231,13 +231,16 @@ class ManagerTest extends TestCase
         $adapter->createDatabase($adapter->getOption('name'));
         $adapter->disconnect();
 
-        $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334', ], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334'], AbstractCommand::CODE_SUCCESS);
 
         $this->assertTrue($adapter->hasTable('system'));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
         $this->assertEquals(21, count($adapter->getColumns('system')));
         $this->assertTrue($adapter->hasIndexByName('permission', 'hash'));
+
+        $this->assertTrue($adapter->hasColumn('permission', 'blob1'));
+        $this->assertTrue($adapter->hasColumn('permission', 'blob2'));
 
         $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334'], AbstractCommand::CODE_SUCCESS);
 
