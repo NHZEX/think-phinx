@@ -28,10 +28,10 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@master
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extension-csv: pdo, pdo_mysql, mbstring #optional, setup extensions
+          extension: pdo, pdo_mysql, mbstring #optional, setup extensions
           coverage: none #optional, setup coverage driver
           pecl: false #optional, setup PECL
 
