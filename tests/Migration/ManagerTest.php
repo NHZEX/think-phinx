@@ -129,11 +129,11 @@ class ManagerTest extends TestCase
         $this->assertTrue($adapter->hasForeignKey('just_logins', ['user_id']));
         $this->assertTrue($adapter->hasTable('change_direction_test'));
         $this->assertTrue($adapter->hasColumn('change_direction_test', 'subthing'));
-        /** @noinspection SqlDialectInspection */
         /** @noinspection SqlNoDataSourceInspection */
+        /** @noinspection SqlResolve */
         $this->assertEquals(
-            count($adapter->fetchAll('SELECT * FROM change_direction_test WHERE subthing IS NOT NULL')),
-            2
+            2,
+            count($adapter->fetchAll('SELECT * FROM change_direction_test WHERE subthing IS NOT NULL'))
         );
 
         // revert all changes to the first
