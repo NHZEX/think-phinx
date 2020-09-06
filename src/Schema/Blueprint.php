@@ -149,6 +149,22 @@ class Blueprint
     }
 
     /**
+     * @param ColumnDefinition $column
+     * @return ColumnDefinition
+     */
+    public function addColumn(ColumnDefinition $column)
+    {
+        if (empty($column->getName())) {
+            throw new RuntimeException('column name is empty');
+        }
+        if (isset($this->columns[$column->getName()])) {
+            throw new RuntimeException('duplicate definition column ' . $column->getName());
+        }
+        $this->columns[$column->getName()] = $column;
+        return $column;
+    }
+
+    /**
      * @return ColumnDefinition[]
      */
     public function getColumns(): array
