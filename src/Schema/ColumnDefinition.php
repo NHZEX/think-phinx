@@ -31,6 +31,9 @@ use function array_pad;
  * @method ColumnDefinition blob(string $name) static 相当于 BLOB
  * @method ColumnDefinition smallInteger(string $name) static 相当于 SMALLINT
  * @method ColumnDefinition unsignedSmallInteger(string $name) static 相当于 Unsigned SMALLINT
+ * @method ColumnDefinition float(string $name, int $precision = null, int $scale = null) static
+ * @method ColumnDefinition double(string $name, int $precision = null, int $scale = null) static
+ * @method ColumnDefinition decimal(string $name, int $precision = null, int $scale = null) static
  *
  * @method ColumnDefinition lockVersion() static lockVersion
  * @method ColumnDefinition createTime() static createTime
@@ -74,6 +77,10 @@ class ColumnDefinition
         'text'   => [Adapter::PHINX_TYPE_TEXT, null],
         'blob'   => [Adapter::PHINX_TYPE_BLOB, null],
         'json'   => [Adapter::PHINX_TYPE_JSON, null],
+
+        'float'   => [Adapter::PHINX_TYPE_FLOAT, null],
+        'double'  => [Adapter::PHINX_TYPE_DOUBLE, null],
+        'decimal' => [Adapter::PHINX_TYPE_DECIMAL, null],
 
         'lockVersion' => [Adapter::PHINX_TYPE_INTEGER, 4294967295],
         'createTime'  => [Adapter::PHINX_TYPE_INTEGER, 4294967295],
@@ -155,6 +162,17 @@ class ColumnDefinition
                 break;
             case 'char':
                 $column->setLimit($arg1);
+                break;
+            case 'float':
+            case 'double':
+            case 'decimal':
+                if (isset($arguments[1]) && is_numeric($arguments[1])) {
+                    $column->setPrecision($arguments[1]);
+                }
+                if (isset($arguments[2]) && is_numeric($arguments[2])) {
+                    $column->setScale($arguments[2]);
+                }
+                $column->setDefault(0);
                 break;
             case 'lockVersion':
             case 'createTime':
@@ -252,10 +270,10 @@ class ColumnDefinition
 
     /**
      * 为字段指定 "默认" 值
-     * @param string|null $default
+     * @param string|int|null $default
      * @return $this
      */
-    public function default(?string $default)
+    public function default($default)
     {
         $this->column->setDefault($default);
         return $this;

@@ -30,6 +30,9 @@ use RuntimeException;
  * @method ColumnDefinition text(string $name) 相当于 TEXT
  * @method ColumnDefinition blob(string $name) 相当于 BLOB
  * @method ColumnDefinition json(string $name) 相当于 JSON
+ * @method ColumnDefinition float(string $name, int $precision = null, int $scale = null) static
+ * @method ColumnDefinition double(string $name, int $precision = null, int $scale = null) static
+ * @method ColumnDefinition decimal(string $name, int $precision = null, int $scale = null) static
  *
  * @method ColumnDefinition lockVersion() lock_version
  * @method ColumnDefinition createTime() create_time

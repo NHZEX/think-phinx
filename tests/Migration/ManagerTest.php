@@ -130,7 +130,7 @@ class ManagerTest extends TestCase
         $this->assertTrue($adapter->hasTable('change_direction_test'));
         $this->assertTrue($adapter->hasColumn('change_direction_test', 'subthing'));
         /** @noinspection SqlNoDataSourceInspection */
-        /** @noinspection SqlResolve */
+        /** @noinspection SqlDialectInspection */
         $this->assertEquals(
             2,
             count($adapter->fetchAll('SELECT * FROM change_direction_test WHERE subthing IS NOT NULL'))
@@ -236,7 +236,7 @@ class ManagerTest extends TestCase
         $this->assertTrue($adapter->hasTable('system'));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
-        $this->assertEquals(21, count($adapter->getColumns('system')));
+        $this->assertEquals(24, count($adapter->getColumns('system')));
         $this->assertTrue($adapter->hasIndexByName('permission', 'hash'));
 
         $this->assertTrue($adapter->hasColumn('permission', 'blob1'));

@@ -60,6 +60,9 @@ class Init extends AbstractMigration
                 $blueprint->status();
                 $blueprint->genre();
                 $blueprint->remark();
+                $blueprint->float('float', 3, 2);
+                $blueprint->double('double', 6, 5);
+                $blueprint->decimal('decimal', 8, 6);
             });
 
             Schema::create('permission', function (Schema\Blueprint $blueprint) {
