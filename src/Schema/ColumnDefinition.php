@@ -8,6 +8,7 @@
 
 namespace HZEX\Phinx\Schema;
 
+use HZEX\Phinx\Schema;
 use Phinx\Db\Adapter\AdapterInterface as Adapter;
 use Phinx\Db\Table\Column;
 use Phinx\Util\Literal;
@@ -215,8 +216,14 @@ class ColumnDefinition
     public function generated(string $expression, bool $stored = false)
     {
         $originalType = (string) $this->column->getType();
+        $type = Schema::getMigration()->getAdapter()->getSqlType($originalType, $this->column->getLimit());
+        if (isset($type['limit'])) {
+            $typeDef = "{$type['name']}({$type['limit']})";
+        } else {
+            $typeDef = $type['name'];
+        }
         $stored = $stored ? 'STORED' : 'VIRTUAL';
-        $this->column->setType(new Literal("{$originalType} AS ($expression) {$stored}"));
+        $this->column->setType(new Literal("{$typeDef} AS ($expression) {$stored}"));
         $this->column->setDefault(null);
         return $this;
     }

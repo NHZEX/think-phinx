@@ -62,6 +62,14 @@ class Schema
         self::$migration = $prev;
     }
 
+    /**
+     * @return AbstractMigration
+     */
+    public static function getMigration(): AbstractMigration
+    {
+        return self::$migration;
+    }
+
     public static function __callStatic($name, $arguments)
     {
         $method = ['create', 'update', 'save'];
