@@ -236,7 +236,7 @@ class ManagerTest extends TestCase
         $this->assertTrue($adapter->hasTable('system'));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
-        $this->assertEquals(24, count($adapter->getColumns('system')));
+        $this->assertEquals(26, count($adapter->getColumns('system')));
         $this->assertTrue($adapter->hasIndexByName('permission', 'hash'));
 
         $this->assertTrue($adapter->hasColumn('permission', 'blob1'));

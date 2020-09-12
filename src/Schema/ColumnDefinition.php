@@ -10,6 +10,7 @@ namespace HZEX\Phinx\Schema;
 
 use Phinx\Db\Adapter\AdapterInterface as Adapter;
 use Phinx\Db\Table\Column;
+use Phinx\Util\Literal;
 use think\helper\Str;
 use function array_pad;
 
@@ -207,6 +208,20 @@ class ColumnDefinition
     }
 
     /**
+     * @param string $expression
+     * @param bool   $stored
+     * @return ColumnDefinition
+     */
+    public function generated(string $expression, bool $stored = false)
+    {
+        $originalType = (string) $this->column->getType();
+        $stored = $stored ? 'STORED' : 'VIRTUAL';
+        $this->column->setType(new Literal("{$originalType} AS ($expression) {$stored}"));
+        $this->column->setDefault(null);
+        return $this;
+    }
+
+    /**
      * 将此字段放置在其它字段 "之后" (MySQL)
      * @param string $columnName
      * @return $this
@@ -270,7 +285,7 @@ class ColumnDefinition
 
     /**
      * 为字段指定 "默认" 值
-     * @param string|int|null $default
+     * @param string|int|Literal|null $default
      * @return $this
      */
     public function default($default)
