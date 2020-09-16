@@ -222,8 +222,10 @@ class ColumnDefinition
         } else {
             $typeDef = $type['name'];
         }
-        $stored = $stored ? 'STORED' : 'VIRTUAL';
-        $this->column->setType(new Literal("{$typeDef} AS ($expression) {$stored}"));
+        $stored = $stored ? ' STORED' : ' VIRTUAL';
+        $unsigned = $this->column->isSigned() ? ' UNSIGNED' : '';
+        $this->unsigned(false);
+        $this->column->setType(new Literal("{$typeDef}{$unsigned} AS ($expression){$stored}"));
         $this->column->setDefault(null);
         return $this;
     }

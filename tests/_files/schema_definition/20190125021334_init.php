@@ -50,7 +50,7 @@ class Init extends AbstractMigration
                 $blueprint->char('char', 8);
                 $blueprint->text('text');
                 $blueprint->json('json');
-                $blueprint->tinyInteger('is_home')->generated('`int` & 1 > 0');
+                $blueprint->unsignedTinyInteger('is_home')->generated('`int` & 1 > 0');
                 $blueprint->tinyInteger('is_popular')->generated('`int` & 2 > 0', true);
                 $blueprint->lockVersion();
                 $blueprint->createTime();
