@@ -5,13 +5,16 @@ on: [push]
 jobs:
   phpunit:
     runs-on: ubuntu-latest
+    continue-on-error: ${{ contains( matrix.php, strategy.experimental ) }}
     strategy:
       fail-fast: false
+      experimental: [8.0]
       matrix:
         php:
           - 7.2
           - 7.3
           - 7.4
+          - 8.0
         prefer-lowest: [false]
     services:
       mysql:
