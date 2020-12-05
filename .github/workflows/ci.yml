@@ -5,10 +5,9 @@ on: [push]
 jobs:
   phpunit:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ contains( matrix.php, strategy.experimental ) }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
-      experimental: [8.0]
       matrix:
         php:
           - 7.2
@@ -16,6 +15,11 @@ jobs:
           - 7.4
           - 8.0
         prefer-lowest: [false]
+        experimental: [false]
+        include:
+          - php: 8.0
+            prefer-lowest: false
+            experimental: true
     services:
       mysql:
         image: mysql:5.7
@@ -36,7 +40,6 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: pdo, pdo_mysql, mbstring #optional, setup extensions
           coverage: none #optional, setup coverage driver
-          pecl: false #optional, setup PECL
 
       - name: Check Version
         run: |

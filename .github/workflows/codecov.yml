@@ -30,7 +30,6 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: pdo, pdo_mysql, mbstring #optional, setup extensions
           coverage: pcov #optional, setup coverage driver
-          pecl: false #optional, setup PECL
 
       - name: Check Version
         run: |
