@@ -49,7 +49,7 @@ class Init extends AbstractMigration
                 $blueprint->string('spec', 255)->unsigned(true)
                     ->generated("json_unquote(json_extract(`food`,'$.spec'))")
                     ->comment('菜品规格名');
-                $blueprint->string('food_unit', 255)->nullable(true)->unsigned(true)
+                $blueprint->text('food_unit')->nullable(true)->unsigned(true)
                     ->generated("json_unquote(json_extract(`food`,'$.food_unit'))")
                     ->comment('单位量词');
                 $blueprint->integer('not_discount')
