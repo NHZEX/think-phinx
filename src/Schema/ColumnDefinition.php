@@ -10,10 +10,13 @@ namespace HZEX\Phinx\Schema;
 
 use HZEX\Phinx\Schema;
 use Phinx\Db\Adapter\AdapterInterface as Adapter;
+use Phinx\Db\Adapter\AdapterWrapper;
 use Phinx\Db\Table\Column;
 use Phinx\Util\Literal;
 use think\helper\Str;
 use function array_pad;
+use function is_array;
+use function method_exists;
 
 /**
  * 字段构造增强
@@ -102,6 +105,8 @@ class ColumnDefinition
 
     /** @var Column */
     protected $column;
+
+    protected $generatedExpression = null;
 
     protected function __construct(Column $column)
     {
@@ -215,19 +220,16 @@ class ColumnDefinition
      */
     public function generated(string $expression, bool $stored = false)
     {
-        $originalType = (string) $this->column->getType();
-        $type = Schema::getMigration()->getAdapter()->getSqlType($originalType, $this->column->getLimit());
-        if (isset($type['limit'])) {
-            $typeDef = "{$type['name']}({$type['limit']})";
-        } else {
-            $typeDef = $type['name'];
-        }
-        $stored = $stored ? ' STORED' : ' VIRTUAL';
-        $unsigned = $this->column->isSigned() ? ' UNSIGNED' : '';
-        $this->unsigned(false);
-        $this->column->setType(new Literal("{$typeDef}{$unsigned} AS ($expression){$stored}"));
-        $this->column->setDefault(null);
+        $this->generatedExpression = [
+            $expression,
+            $stored,
+        ];
         return $this;
+    }
+
+    protected function isGenerated(): bool
+    {
+        return $this->generatedExpression !== null;
     }
 
     /**
@@ -360,6 +362,43 @@ class ColumnDefinition
      */
     public function getColumn()
     {
+        $this->buildGenerated();
         return $this->column;
+    }
+
+    private function buildGenerated()
+    {
+        if (!$this->isGenerated()) {
+            return;
+        }
+        [$expression, $stored] = $this->generatedExpression;
+        $originalType = (string) $this->column->getType();
+        // 寻找适配器
+        $adapter = Schema::getMigration()->getAdapter();
+        while ($adapter instanceof AdapterWrapper && method_exists($adapter, 'getAdapter')) {
+            $adapter = $adapter->getAdapter();
+        }
+        // 获取可无符号列
+        $getSignedColumnTypes = function () {
+            return $this->signedColumnTypes ?? null;
+        };
+        $signedColumnTypes = $getSignedColumnTypes->call($adapter);
+        // 获取列类型
+        $type = $adapter->getSqlType($originalType, $this->column->getLimit());
+        if (isset($type['limit'])) {
+            $typeDef = "{$type['name']}({$type['limit']})";
+        } else {
+            $typeDef = $type['name'];
+        }
+        // 构建表达式
+        $stored = $stored ? ' STORED' : ' VIRTUAL';
+        $isUnsigned = !$this->column->isSigned()
+            && is_array($signedColumnTypes)
+            && isset($signedColumnTypes[$originalType]);
+        $unsigned = $isUnsigned ? ' unsigned' : '';
+        // 重置为有符号
+        $this->column->setSigned(true);
+        $this->column->setType(new Literal("{$typeDef}{$unsigned} AS ($expression){$stored}"));
+        $this->column->setDefault(null);
     }
 }

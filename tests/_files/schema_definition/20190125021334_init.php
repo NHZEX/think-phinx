@@ -34,6 +34,31 @@ class Init extends AbstractMigration
     public function change()
     {
         Schema::cxt($this, function () {
+            Schema::create('test_generated', function (Schema\Blueprint $blueprint) {
+                $blueprint->comment = '订单菜品';
+                $blueprint->unsigned = true;
+
+                $blueprint->json('food')->comment('菜品快照');
+                $blueprint->string('food_name', 64)
+                    ->unsigned(true)
+                    ->generated("json_unquote(json_extract(`food`,'$.food_name'))")
+                    ->comment('菜品名称');
+                $blueprint->integer('price')
+                    ->generated("json_extract(`food`,'$.price')")
+                    ->comment('单价');
+                $blueprint->string('spec', 255)->unsigned(true)
+                    ->generated("json_unquote(json_extract(`food`,'$.spec'))")
+                    ->comment('菜品规格名');
+                $blueprint->string('food_unit', 255)->nullable(true)->unsigned(true)
+                    ->generated("json_unquote(json_extract(`food`,'$.food_unit'))")
+                    ->comment('单位量词');
+                $blueprint->integer('not_discount')
+                    ->generated("json_extract(`food`,'$.not_discount')")
+                    ->unsigned(true)
+                    ->comment('是否打折: 1.是 2.否');
+            });
+
+
             Schema::create('system', function (Schema\Blueprint $blueprint) {
                 $blueprint->id = false;
                 $blueprint->primaryKey = 'label';
