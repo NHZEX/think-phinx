@@ -398,7 +398,7 @@ class ColumnDefinition
         $unsigned = $isUnsigned ? ' unsigned' : '';
         // 重置为有符号
         $this->column->setSigned(true);
-        $this->column->setType(new Literal("{$typeDef}{$unsigned} AS ($expression){$stored}"));
+        $this->column->setType(Literal::from("{$typeDef}{$unsigned} AS ($expression){$stored}"));
         $this->column->setDefault(null);
     }
 }
