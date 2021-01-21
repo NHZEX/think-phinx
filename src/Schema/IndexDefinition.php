@@ -8,6 +8,9 @@
 
 namespace HZEX\Phinx\Schema;
 
+use ValueError;
+use function strtoupper;
+
 class IndexDefinition
 {
     protected $options = [];
@@ -114,6 +117,22 @@ class IndexDefinition
     public function collation(string $value)
     {
         $this->options['collation'] = $value;
+        return $this;
+    }
+
+    /**
+     * @param array $order
+     * @return $this
+     */
+    public function order(array $order)
+    {
+        foreach ($order as $field => $value) {
+            $value = strtoupper($value);
+            if ($value !== 'DESC' && $value !== 'ASC') {
+                throw new ValueError('order value can only be DESC or ASC');
+            }
+        }
+        $this->options['order'] = $order;
         return $this;
     }
 

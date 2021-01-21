@@ -105,7 +105,7 @@ class Init extends AbstractMigration
                 $blueprint->string('lkey', 64)->ccAscii()->comment('节点逻辑key');
                 $blueprint->smallInteger('sort')->comment('节点排序')->default(255);
                 $blueprint->unique('hash');
-                $blueprint->index(['pid', 'genre']);
+                $blueprint->index(['pid', 'genre'])->order(['pid' => 'ASC', 'genre' => 'DESC']);
                 $blueprint->index(['pid', 'sort']);
                 $blueprint->unique('lkey')->limit(32);
                 $blueprint->unique('nkey')->limit(48);
