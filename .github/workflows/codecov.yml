@@ -5,11 +5,6 @@ on: [push]
 jobs:
   phpunit:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php:
-          - 7.4
     services:
       mysql:
         image: mysql:5.7
@@ -27,7 +22,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 7.4
           extensions: pdo, pdo_mysql, mbstring #optional, setup extensions
           coverage: pcov #optional, setup coverage driver
 
@@ -39,6 +34,18 @@ jobs:
 
       - name: Validate composer.json and composer.lock
         run: composer validate
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache vendor
+        uses: actions/cache@v2
+        env:
+          cache-name: composer-cache
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
 
       - name: Install dependencies (composer.lock)
         run: composer install --prefer-dist --no-progress --no-suggest
