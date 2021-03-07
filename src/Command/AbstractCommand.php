@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace HZEX\Phinx\Command;
 
-use HZEX\Phinx\ConsoleBridge\ThinkInput;
-use HZEX\Phinx\ConsoleBridge\ThinkOutput;
 use HZEX\Phinx\PhinxConfigBridge;
 use InvalidArgumentException;
 use Phinx\Config\ConfigInterface;
@@ -17,6 +15,8 @@ use think\console\Command;
 use think\console\Input;
 use think\console\Output;
 use UnexpectedValueException;
+use Zxin\Think\Symfony\Console\InputBridge;
+use Zxin\Think\Symfony\Console\OutputBridge;
 use function HZEX\Phinx\vendor_path;
 
 abstract class AbstractCommand extends Command
@@ -54,12 +54,12 @@ abstract class AbstractCommand extends Command
     protected $manager;
 
     /**
-     * @var ThinkInput
+     * @var InputBridge
      */
     protected $inputBridge;
 
     /**
-     * @var ThinkOutput
+     * @var OutputBridge
      */
     protected $outputBridge;
 
@@ -78,8 +78,8 @@ abstract class AbstractCommand extends Command
      */
     protected function execute(Input $input, Output $output)
     {
-        $this->inputBridge = new ThinkInput($input);
-        $this->outputBridge = new ThinkOutput($output);
+        $this->inputBridge = new InputBridge($input);
+        $this->outputBridge = new OutputBridge($output);
         return $this->handle($this->inputBridge, $this->outputBridge);
     }
 
