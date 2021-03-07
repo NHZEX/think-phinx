@@ -3,6 +3,7 @@ namespace TestMigrations;
 
 use HZEX\Phinx\Schema;
 use Phinx\Migration\AbstractMigration;
+use Zxin\Phinx\Schema\Blueprint;
 
 class Init extends AbstractMigration
 {
@@ -34,7 +35,7 @@ class Init extends AbstractMigration
     public function change()
     {
         Schema::cxt($this, function () {
-            Schema::create('test_generated', function (Schema\Blueprint $blueprint) {
+            Schema::create('test_generated', function (Blueprint $blueprint) {
                 $blueprint->comment = '订单菜品';
                 $blueprint->unsigned = true;
 
@@ -59,7 +60,7 @@ class Init extends AbstractMigration
             });
 
 
-            Schema::create('system', function (Schema\Blueprint $blueprint) {
+            Schema::create('system', function (Blueprint $blueprint) {
                 $blueprint->id = false;
                 $blueprint->primaryKey = 'label';
                 $blueprint->comment = '标签';
@@ -92,7 +93,7 @@ class Init extends AbstractMigration
                 $blueprint->decimal('decimal', 8, 6);
             });
 
-            Schema::create('permission', function (Schema\Blueprint $blueprint) {
+            Schema::create('permission', function (Blueprint $blueprint) {
                 $blueprint->comment = '权限';
                 $blueprint->unsigned = true;
 

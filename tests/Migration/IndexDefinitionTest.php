@@ -2,9 +2,9 @@
 
 namespace Test\Phinx\Migration;
 
-use HZEX\Phinx\Schema\IndexDefinition;
 use PHPUnit\Framework\TestCase;
 use ValueError;
+use Zxin\Phinx\Schema\Definition\IndexDefinition;
 
 class IndexDefinitionTest extends TestCase
 {

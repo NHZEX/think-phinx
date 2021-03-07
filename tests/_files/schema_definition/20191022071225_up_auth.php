@@ -4,6 +4,7 @@ namespace TestMigrations;
 
 use HZEX\Phinx\Schema;
 use Phinx\Migration\AbstractMigration;
+use Zxin\Phinx\Schema\Blueprint;
 
 class UpAuth extends AbstractMigration
 {
@@ -13,7 +14,7 @@ class UpAuth extends AbstractMigration
     public function up()
     {
         Schema::cxt($this, function () {
-            Schema::create('permission', function (Schema\Blueprint $blueprint) {
+            Schema::create('permission', function (Blueprint $blueprint) {
                 $blueprint->table->drop()->save();
 
                 $blueprint->comment = '权限';
@@ -29,7 +30,7 @@ class UpAuth extends AbstractMigration
                 $blueprint->index('name')->limit(64);
             });
 
-            Schema::save('system', function (Schema\Blueprint $blueprint) {
+            Schema::save('system', function (Blueprint $blueprint) {
                 $blueprint->string('string', 512)->comment('修改列')->change();
             });
         });
@@ -41,7 +42,7 @@ class UpAuth extends AbstractMigration
     public function down()
     {
         Schema::cxt($this, function () {
-            Schema::save('permission', function (Schema\Blueprint $blueprint) {
+            Schema::save('permission', function (Blueprint $blueprint) {
                 $blueprint->table->removeIndexByName('name');
                 $blueprint->table->save();
             });
