@@ -6,6 +6,7 @@ namespace HZEX\Phinx\Command;
 use HZEX\Phinx\PhinxConfigBridge;
 use InvalidArgumentException;
 use Phinx\Config\ConfigInterface;
+use Phinx\Console\Command\AbstractCommand as PhinxAbstractCommand;
 use Phinx\Db\Adapter\AdapterInterface;
 use Phinx\Migration\Manager;
 use Phinx\Util\Util;
@@ -54,6 +55,31 @@ abstract class AbstractCommand extends Command
     protected $manager;
 
     /**
+     * Exit code for when command executes successfully
+     * @var int
+     */
+    public const CODE_SUCCESS = PhinxAbstractCommand::CODE_SUCCESS;
+
+    /**
+     * Exit code for when command hits a non-recoverable error during execution
+     * @var int
+     */
+    public const CODE_ERROR = PhinxAbstractCommand::CODE_ERROR;
+
+    /**
+     * Exit code for when status command is run and there are missing migrations
+     * @var int
+     */
+    public const CODE_STATUS_MISSING = PhinxAbstractCommand::CODE_STATUS_MISSING;
+
+    /**
+     * Exit code for when status command is run and there are no missing migations,
+     * but does have down migrations
+     * @var int
+     */
+    public const CODE_STATUS_DOWN = PhinxAbstractCommand::CODE_STATUS_DOWN;
+
+    /**
      * @var InputBridge
      */
     protected $inputBridge;
@@ -76,7 +102,7 @@ abstract class AbstractCommand extends Command
      * @param Output $output
      * @return int|void|null
      */
-    protected function execute(Input $input, Output $output)
+    final protected function execute(Input $input, Output $output)
     {
         $this->inputBridge = new InputBridge($input);
         $this->outputBridge = new OutputBridge($output);
@@ -86,7 +112,7 @@ abstract class AbstractCommand extends Command
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @return mixed
+     * @return int
      */
     abstract protected function handle(InputInterface $input, OutputInterface $output);
 

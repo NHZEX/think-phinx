@@ -113,7 +113,7 @@ class ManagerTest extends TestCase
         $adapter->createDatabase($adapter->getOption('name'));
         $adapter->disconnect();
 
-        $this->callMigrate('status', [], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('status', [], AbstractCommand::CODE_STATUS_DOWN);
 
         $this->callMigrate('run', ['-e', 'main'], AbstractCommand::CODE_SUCCESS);
 
@@ -151,7 +151,7 @@ class ManagerTest extends TestCase
         // revert all changes to the first
         $this->callMigrate('rollback', ['-t', '0'], AbstractCommand::CODE_SUCCESS);
 
-        $this->callMigrate('status', [], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('status', [], AbstractCommand::CODE_STATUS_DOWN);
     }
 
 
@@ -307,7 +307,7 @@ class ManagerTest extends TestCase
     public function callMigrate(string $name, array $parameters = [], $successCode = AbstractCommand::CODE_SUCCESS, string $driver = 'console')
     {
         $this->call('migrate:' . $name, $parameters, $exitCode, $driver);
-        $this->assertEquals($successCode, $exitCode, "call migrate:{$name} fail");
+        $this->assertEquals($successCode, $exitCode, "call migrate:{$name} fail ({$successCode}<>{$exitCode})");
     }
 
     /**

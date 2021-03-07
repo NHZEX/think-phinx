@@ -3,18 +3,16 @@ declare(strict_types=1);
 
 namespace HZEX\Phinx\Command;
 
+use Phinx\Util\Util;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use function array_keys;
 use function array_map;
 use function array_merge;
-use function getcwd;
 use function max;
-use function realpath;
 use function sprintf;
 use function str_pad;
 use function str_repeat;
-use function str_replace;
 
 class ListAliases extends AbstractCommand
 {
@@ -60,11 +58,11 @@ class ListAliases extends AbstractCommand
             $output->writeln(
                 sprintf(
                     '<error>No aliases defined in %s</error>',
-                    str_replace(getcwd(), '', realpath($this->config->getConfigFilePath()))
+                    Util::relativePath($this->config->getConfigFilePath())
                 )
             );
         }
 
-        return 0;
+        return self::CODE_SUCCESS;
     }
 }
