@@ -19,7 +19,7 @@
         "robmorgan/phinx": "~0.12.5",
         "topthink/framework": "^6.0.6",
         "topthink/think-orm": "^2.0.30",
-        "zxin/phinx-schema": "^1.0",
+        "zxin/phinx-schema": "^1.0.1",
         "zxin/think-symfony-bridge": "^1.0"
     },
     "require-dev": {

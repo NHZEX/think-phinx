@@ -1,7 +1,13 @@
 <phpunit
-        bootstrap="tests/phpunit-bootstrap.php"
+        backupGlobals="false"
+        backupStaticAttributes="false"
         colors="true"
-        columns="max"
+        bootstrap="tests/phpunit-bootstrap.php"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        processIsolation="false"
+        stopOnFailure="false"
 >
 
     <!--
@@ -50,8 +56,11 @@
     </testsuite>
 
     <filter>
-        <whitelist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src/</directory>
+            <exclude>
+                <file>src/Service.php</file>
+            </exclude>
         </whitelist>
     </filter>
 
