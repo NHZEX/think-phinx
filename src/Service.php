@@ -5,6 +5,7 @@ namespace HZEX\Phinx;
 
 use HZEX\Phinx\Command\Breakpoint;
 use HZEX\Phinx\Command\Create;
+use HZEX\Phinx\Command\ListAliases;
 use HZEX\Phinx\Command\Migrate;
 use HZEX\Phinx\Command\Rollback;
 use HZEX\Phinx\Command\SeedCreate;
@@ -25,7 +26,7 @@ class Service extends \think\Service
             Test::getDefaultName()        => Test::class,
             SeedCreate::getDefaultName()  => SeedCreate::class,
             SeedRun::getDefaultName()     => SeedRun::class,
-            // ListAliases::getDefaultName() => ListAliases::class,
+            ListAliases::getDefaultName() => ListAliases::class,
         ]);
     }
 }

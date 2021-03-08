@@ -75,6 +75,17 @@ class ManagerTest extends TestCase
         return $this->manager->getEnvironment($env ?? $this->defaultDb)->getAdapter();
     }
 
+    public function testListAliases()
+    {
+        $this->setPhinxPaths([
+            'Foo\Bar' => __DIR__ . '/../_files_foo_bar/reversiblemigrations'
+        ], [
+            __DIR__ . '/../_files/empty_seed'
+        ]);
+        $this->call('list:aliases', [], $exitCode, 'console');
+        $this->assertEquals(AbstractCommand::CODE_SUCCESS, $exitCode);
+    }
+
     public function testCreate()
     {
         $tmp = sys_get_temp_dir() . '/_test/';
@@ -86,12 +97,12 @@ class ManagerTest extends TestCase
         $this->setPhinxPaths($tmp . 'migrations', $tmp . 'seeds');
 
         $this->call('migrate:create', ['TestMigration'], $exitCode, 'console');
-        $this->assertEquals(0, $exitCode, "call migrate:create fail");
+        $this->assertEquals(AbstractCommand::CODE_SUCCESS, $exitCode, "call migrate:create fail");
 
         $this->assertTrue(glob($tmp . 'migrations/*_test_migration.php') >= 1);
 
         $this->call('seed:create', ['SeedMigration'], $exitCode, 'console');
-        $this->assertEquals(0, $exitCode, "call seed:create fail");
+        $this->assertEquals(AbstractCommand::CODE_SUCCESS, $exitCode, "call seed:create fail");
 
         $this->assertTrue(is_file($tmp . 'seeds/SeedMigration.php'));
     }
@@ -115,9 +126,9 @@ class ManagerTest extends TestCase
 
         $this->callMigrate('status', [], AbstractCommand::CODE_STATUS_DOWN);
 
-        $this->callMigrate('run', ['-e', 'main'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('run', ['-e', 'main']);
 
-        $this->callMigrate('status', [], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('status', []);
 
         // ensure up migrations worked
         $this->assertFalse($adapter->hasTable('info'));
@@ -149,7 +160,7 @@ class ManagerTest extends TestCase
         $this->assertFalse($adapter->hasTable('change_direction_test'));
 
         // revert all changes to the first
-        $this->callMigrate('rollback', ['-t', '0'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('rollback', ['-t', '0']);
 
         $this->callMigrate('status', [], AbstractCommand::CODE_STATUS_DOWN);
     }
@@ -231,7 +242,7 @@ class ManagerTest extends TestCase
         $adapter->createDatabase($adapter->getOption('name'));
         $adapter->disconnect();
 
-        $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334']);
 
         $this->assertTrue($adapter->hasTable('system'));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
@@ -242,9 +253,9 @@ class ManagerTest extends TestCase
         $this->assertTrue($adapter->hasColumn('permission', 'blob1'));
         $this->assertTrue($adapter->hasColumn('permission', 'blob2'));
 
-        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334']);
 
-        $this->callMigrate('run', ['-e', 'main', '-t', '20191022071225'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('run', ['-e', 'main', '-t', '20191022071225']);
 
         $this->assertFalse($adapter->hasIndexByName('permission', 'hash'));
         $this->assertTrue($adapter->hasIndexByName('permission', 'name'));
@@ -258,23 +269,23 @@ class ManagerTest extends TestCase
         $this->assertTrue('string' === $column->getName());
         $this->assertTrue(512 === $column->getLimit());
 
-        $this->callMigrate('run', ['-e', 'main', '-t', '20200522035054'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('run', ['-e', 'main', '-t', '20200522035054']);
 
         $this->assertFalse($adapter->hasColumn('system', 'text'));
         $this->assertFalse($adapter->hasColumn('system', 'json'));
 
-        $this->callMigrate('rollback', ['-t', '20191022071225'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('rollback', ['-t', '20191022071225']);
 
         $this->assertTrue($adapter->hasColumn('system', 'text'));
         $this->assertTrue($adapter->hasColumn('system', 'json'));
 
-        $this->callMigrate('rollback', ['-t', '0'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('rollback', ['-t', '0']);
 
         $this->assertFalse($adapter->hasIndexByName('permission', 'name'));
         $this->assertTrue($adapter->hasTable('system'));
 
-        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334', '--unset'], AbstractCommand::CODE_SUCCESS);
-        $this->callMigrate('rollback', ['-t', '0'], AbstractCommand::CODE_SUCCESS);
+        $this->callMigrate('breakpoint', ['-e', 'main', '-t', '20190125021334', '--unset']);
+        $this->callMigrate('rollback', ['-t', '0']);
 
         $this->assertFalse($adapter->hasTable('system'));
     }
