@@ -1,4 +1,8 @@
 <?php
+/**
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace HZEX\Phinx\Command;
@@ -18,6 +22,11 @@ class ListAliases extends AbstractCommand
 {
     protected static $defaultName = 'list:aliases';
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return void
+     */
     protected function configure()
     {
         $this->setName(static::$defaultName);
@@ -27,7 +36,7 @@ class ListAliases extends AbstractCommand
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function handle(InputInterface $input, OutputInterface $output)
     {

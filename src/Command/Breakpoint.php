@@ -1,4 +1,8 @@
 <?php
+/**
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace HZEX\Phinx\Command;
@@ -39,7 +43,7 @@ EOT
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function handle(InputInterface $input, OutputInterface $output)
     {

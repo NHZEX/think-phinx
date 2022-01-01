@@ -1,4 +1,8 @@
 <?php
+/**
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace HZEX\Phinx\Command;
@@ -6,7 +10,6 @@ namespace HZEX\Phinx\Command;
 use Exception;
 use InvalidArgumentException;
 use Phinx\Config\NamespaceAwareInterface;
-use Phinx\Migration\CreationInterface;
 use Phinx\Util\Util;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -120,12 +123,20 @@ class Create extends AbstractCommand
 
         $path      = realpath($path);
         $className = $input->getArgument('name');
+        if ($className === null) {
+            $currentTimestamp = Util::getCurrentTimestamp();
+            $className = 'V' . $currentTimestamp;
+            $fileName = $currentTimestamp . '.php';
+        } else {
+            if (!Util::isValidPhinxClassName($className)) {
+                throw new InvalidArgumentException(sprintf(
+                    'The migration class name "%s" is invalid. Please use CamelCase format.',
+                    $className
+                ));
+            }
 
-        if (!Util::isValidPhinxClassName($className)) {
-            throw new InvalidArgumentException(sprintf(
-                'The migration class name "%s" is invalid. Please use CamelCase format.',
-                $className
-            ));
+            // Compute the file path
+            $fileName = Util::mapClassNameToFileName($className);
         }
 
         if (!Util::isUniqueMigrationClassName($className, $path)) {
@@ -136,8 +147,6 @@ class Create extends AbstractCommand
             ));
         }
 
-        // Compute the file path
-        $fileName = Util::mapClassNameToFileName($className);
         $filePath = $path . DIRECTORY_SEPARATOR . $fileName;
 
         if (is_file($filePath)) {
@@ -155,7 +164,9 @@ class Create extends AbstractCommand
         }
 
         // Get the alternative template and static class options from the command line, but only allow one of them.
+        /** @phpstan-var class-string|null $altTemplate */
         $altTemplate       = $input->getOption('template');
+        /** @phpstan-var class-string|null $creationClassName */
         $creationClassName = $input->getOption('class');
         if ($altTemplate && $creationClassName) {
             throw new InvalidArgumentException('Cannot use --template and --class at the same time');
@@ -218,7 +229,6 @@ class Create extends AbstractCommand
         // Determine the appropriate mechanism to get the template
         if ($creationClassName) {
             // Get the template from the creation class
-            /** @var CreationInterface $creationClass */
             $creationClass = new $creationClassName($input, $output);
             $contents      = $creationClass->getMigrationTemplate();
         } else {
@@ -246,6 +256,7 @@ class Create extends AbstractCommand
 
         // Do we need to do the post creation call to the creation class?
         if (isset($creationClass)) {
+            /** @var \Phinx\Migration\CreationInterface $creationClass */
             $creationClass->postMigrationCreation($filePath, $className, $this->getConfig()->getMigrationBaseClassName());
         }
 
@@ -259,8 +270,8 @@ class Create extends AbstractCommand
             $output->writeln('<info>using default template</info>');
         }
 
-        $output->writeln('<info>created</info> ' . str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $filePath));
+        $output->writeln('<info>created</info> ' . Util::relativePath($filePath));
 
-        return 0;
+        return self::CODE_SUCCESS;
     }
 }

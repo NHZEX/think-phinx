@@ -1,4 +1,8 @@
 <?php
+/**
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace HZEX\Phinx\Command;
@@ -19,7 +23,9 @@ class Test extends AbstractCommand
     protected static $defaultName = 'migrate:test';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {
@@ -30,11 +36,12 @@ class Test extends AbstractCommand
         $this->setDescription('Verify the configuration file')
             ->setHelp(
                 <<<EOT
-The <info>test</info> command verifies the YAML configuration file and optionally an environment
+The <info>test</info> command is used to verify the phinx configuration file and optionally an environment
 
 <info>phinx test</info>
 <info>phinx test -e development</info>
 
+If the environment option is set, it will test that phinx can connect to the DB associated with that environment
 EOT
             );
     }
@@ -85,6 +92,6 @@ EOT
 
         $output->writeln('<info>success!</info>');
 
-        return 0;
+        return self::CODE_SUCCESS;
     }
 }

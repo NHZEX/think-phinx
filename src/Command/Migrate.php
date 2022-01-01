@@ -1,4 +1,8 @@
 <?php
+/**
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace HZEX\Phinx\Command;
@@ -15,7 +19,9 @@ class Migrate extends AbstractCommand
     protected static $defaultName = 'migrate:run';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {

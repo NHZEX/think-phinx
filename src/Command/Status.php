@@ -1,4 +1,8 @@
 <?php
+/**
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace HZEX\Phinx\Command;
@@ -11,6 +15,11 @@ class Status extends AbstractCommand
 {
     protected static $defaultName = 'migrate:status';
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return void
+     */
     protected function configure()
     {
         $this->setName(static::$defaultName);
@@ -54,7 +63,7 @@ EOT
             $output->writeln('<info>using format</info> ' . $format);
         }
 
-        $output->writeln('<info>ordering by </info>' . $this->getConfig()->getVersionOrder() . " time");
+        $output->writeln('<info>ordering by </info>' . $this->getConfig()->getVersionOrder() . ' time');
 
         // print the status
         $result = $this->getManager()->printStatus($environment, $format);

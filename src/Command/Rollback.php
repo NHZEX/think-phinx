@@ -1,5 +1,9 @@
 <?php
 declare(strict_types=1);
+/**
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
+ */
 
 namespace HZEX\Phinx\Command;
 
@@ -14,7 +18,9 @@ class Rollback extends AbstractCommand
     protected static $defaultName = 'migrate:rollback';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return void
      */
     protected function configure()
     {
@@ -124,9 +130,7 @@ EOT
      * Get Target from Date
      *
      * @param string $date The date to convert to a target.
-     *
      * @throws \InvalidArgumentException
-     *
      * @return string The target
      */
     public function getTargetFromDate($date)
