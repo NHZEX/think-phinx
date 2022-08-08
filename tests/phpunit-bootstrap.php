@@ -3,6 +3,7 @@
 use HZEX\Phinx\Service;
 use think\App;
 
+require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/TestConfiguration.php';
 
 $app = new App(__DIR__);
@@ -16,4 +17,4 @@ $app->config->set([
         ],
     ],
 ], 'cache');
-$app->console;
+var_dump($app->console->getLongVersion());
