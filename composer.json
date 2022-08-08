@@ -20,11 +20,11 @@
         "topthink/framework": "^6.0.6",
         "topthink/think-orm": "^2.0.30",
         "zxin/phinx-schema": "^1.0.1",
-        "zxin/think-symfony-bridge": "^1.0"
+        "zxin/think-symfony-bridge": "^1.0|^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8|^9",
-        "symfony/var-dumper": "^5.0|^4.0"
+        "symfony/var-dumper": "^5.0|^6.0"
     },
     "autoload": {
         "psr-4": {
