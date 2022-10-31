@@ -29,9 +29,14 @@ abstract class AbstractCommand extends Command
     use PhinxConfigBridge;
 
     /**
-     * The location of the default migration template.
+     * The location of the default change migration template.
      */
-    const DEFAULT_MIGRATION_TEMPLATE = '/Migration/Migration.template.php.dist';
+    protected const DEFAULT_CHANGE_MIGRATION_TEMPLATE = '/Migration/Migration.change.template.php.dist';
+
+    /**
+     * The location of the default up/down migration template.
+     */
+    protected const DEFAULT_UP_DOWN_MIGRATION_TEMPLATE = '/Migration/Migration.up_down.template.php.dist';
 
     /**
      * The location of the default seed template.
@@ -236,7 +241,7 @@ abstract class AbstractCommand extends Command
      */
     protected function getMigrationTemplateFilename()
     {
-        return $this->getPhinxPath() . 'src/Phinx' . self::DEFAULT_MIGRATION_TEMPLATE;
+        return $this->getPhinxPath() . 'src/Phinx' . self::DEFAULT_UP_DOWN_MIGRATION_TEMPLATE;
     }
 
     /**
