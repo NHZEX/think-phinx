@@ -5,7 +5,7 @@ namespace TestSeedTests;
 
 class InfoSeeder extends \Phinx\Seed\AbstractSeed
 {
-    public function run()
+    public function run(): void
     {
         $data = [
             [

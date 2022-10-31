@@ -28,8 +28,8 @@ trait PhinxConfigBridge
         $db                               = app()->db;
         $name                             = $db->getConfig('default', 'mysql');
         $environments                     = $config['environments'];
-        if (!isset($environments['default_database'])) {
-            $environments['default_database'] = $name;
+        if (!isset($environments['default_environment'])) {
+            $environments['default_environment'] = $name;
         }
         foreach ($db->getConfig('connections', []) as $name => $connection) {
             if (isset($environments[$name])) {

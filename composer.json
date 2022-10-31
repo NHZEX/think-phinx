@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": "^7.2|^8.0",
-        "robmorgan/phinx": "~0.12.5",
+        "robmorgan/phinx": "~0.12.5|~0.13.1",
         "topthink/framework": "^6.0.6",
         "topthink/think-orm": "^2.0.30",
         "zxin/phinx-schema": "^1.0.1",
