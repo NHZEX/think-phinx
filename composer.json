@@ -18,7 +18,7 @@
         "php": "^7.4|^8.0",
         "robmorgan/phinx": "~0.12.5|~0.13.1",
         "topthink/framework": "^6.0|^6.1",
-        "topthink/think-orm": "^2.0.30",
+        "topthink/think-orm": "^2.0.30|^3.0",
         "zxin/phinx-schema": "^1.0.2",
         "zxin/think-symfony-bridge": "^2.0"
     },
