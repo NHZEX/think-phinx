@@ -1,16 +1,28 @@
-<phpunit
-        backupGlobals="false"
-        backupStaticAttributes="false"
-        colors="true"
-        bootstrap="tests/phpunit-bootstrap.php"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        processIsolation="false"
-        stopOnFailure="false"
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         bootstrap="tests/phpunit-bootstrap.php"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
 >
-
-    <!--
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src/</directory>
+    </include>
+    <exclude>
+      <file>src/Service.php</file>
+    </exclude>
+    <report>
+      <html outputDirectory="tests/log/report" lowUpperBound="50" highLowerBound="80"/>
+    </report>
+  </coverage>
+  <!--
     * This section defines configuration for running the Phinx unit tests. Some tests
     * have dependencies to PHP extensions and databases which may not be installed
     * on the target system. For these cases, the ability to configure or disable
@@ -20,53 +32,40 @@
     * edit the new file. Never commit plain text passwords to the source code
     * repository.
     -->
-    <php>
-        <env name="APP_DEBUG" value="true" />
-        <!-- MySQL -->
-        <env name="TESTS_DB_MYSQL_ENABLED" value="true" />
-        <env name="TESTS_DB_MYSQL_HOST" value="localhost" />
-        <env name="TESTS_DB_MYSQL_USERNAME" value="root" />
-        <env name="TESTS_DB_MYSQL_PASSWORD" value="" />
-        <env name="TESTS_DB_MYSQL_DATABASE" value="testing" />
-        <env name="TESTS_DB_MYSQL_PORT" value="3306" />
-        <!-- SqlServer [ignore] -->
-        <env name="TESTS_DB_SQLSRV_ENABLED" value="false"/>
-        <env name="TESTS_DB_SQLSRV_HOST" value="localhost"/>
-        <env name="TESTS_DB_SQLSRV_USERNAME" value="vagrant"/>
-        <env name="TESTS_DB_SQLSRV_PASSWORD" value="vagrant"/>
-        <env name="TESTS_DB_SQLSRV_DATABASE" value="test"/>
-        <env name="TESTS_DB_SQLSRV_PORT" value="1433"/>
-        <!-- PostgreSQL [ignore] -->
-        <env name="TESTS_DB_POSTGRES_ENABLED" value="false" />
-        <env name="TESTS_DB_POSTGRES_HOST" value="127.0.0.1" />
-        <env name="TESTS_DB_POSTGRES_USERNAME" value="postgres" />
-        <env name="TESTS_DB_POSTGRES_PASSWORD" value="" />
-        <env name="TESTS_DB_POSTGRES_DATABASE" value="phinx_testing" />
-        <env name="TESTS_DB_POSTGRES_DATABASE_SCHEMA" value="public" />
-        <env name="TESTS_DB_POSTGRES_PORT" value="5432" />
-        <!-- SQLite [ignore] -->
-        <env name="TESTS_DB_SQLITE_ENABLED" value="false" />
-        <env name="TESTS_DB_SQLITE_DATABASE" value="phinx_testing" />
-        <env name="TESTS_DB_SQLITE_SUFFIX" value=".sqlite3" />
-        <env name="TESTS_DB_SQLITE_MEMORY" value="false" />
-    </php>
-
-    <testsuite name="phinx">
-        <directory>tests/</directory>
-    </testsuite>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/</directory>
-            <exclude>
-                <file>src/Service.php</file>
-            </exclude>
-        </whitelist>
-    </filter>
-
-    <logging>
-        <log type="coverage-html" target="tests/log/report"
-            lowUpperBound="50" highLowerBound="80"/>
-<!--        <log type="testdox-html" target="tests/log/testdox.html" />-->
-    </logging>
+  <php>
+    <env name="APP_DEBUG" value="true"/>
+    <!-- MySQL -->
+    <env name="TESTS_DB_MYSQL_ENABLED" value="true"/>
+    <env name="TESTS_DB_MYSQL_HOST" value="localhost"/>
+    <env name="TESTS_DB_MYSQL_USERNAME" value="homestead"/>
+    <env name="TESTS_DB_MYSQL_PASSWORD" value="secret"/>
+    <env name="TESTS_DB_MYSQL_DATABASE" value="testing"/>
+    <env name="TESTS_DB_MYSQL_PORT" value="3306"/>
+    <!-- SqlServer [ignore] -->
+    <env name="TESTS_DB_SQLSRV_ENABLED" value="false"/>
+    <env name="TESTS_DB_SQLSRV_HOST" value="localhost"/>
+    <env name="TESTS_DB_SQLSRV_USERNAME" value="vagrant"/>
+    <env name="TESTS_DB_SQLSRV_PASSWORD" value="vagrant"/>
+    <env name="TESTS_DB_SQLSRV_DATABASE" value="test"/>
+    <env name="TESTS_DB_SQLSRV_PORT" value="1433"/>
+    <!-- PostgreSQL [ignore] -->
+    <env name="TESTS_DB_POSTGRES_ENABLED" value="false"/>
+    <env name="TESTS_DB_POSTGRES_HOST" value="127.0.0.1"/>
+    <env name="TESTS_DB_POSTGRES_USERNAME" value="postgres"/>
+    <env name="TESTS_DB_POSTGRES_PASSWORD" value=""/>
+    <env name="TESTS_DB_POSTGRES_DATABASE" value="phinx_testing"/>
+    <env name="TESTS_DB_POSTGRES_DATABASE_SCHEMA" value="public"/>
+    <env name="TESTS_DB_POSTGRES_PORT" value="5432"/>
+    <!-- SQLite [ignore] -->
+    <env name="TESTS_DB_SQLITE_ENABLED" value="false"/>
+    <env name="TESTS_DB_SQLITE_DATABASE" value="phinx_testing"/>
+    <env name="TESTS_DB_SQLITE_SUFFIX" value=".sqlite3"/>
+    <env name="TESTS_DB_SQLITE_MEMORY" value="false"/>
+  </php>
+  <testsuite name="phinx">
+    <directory>tests/</directory>
+  </testsuite>
+  <logging>
+    <!--        <log type="testdox-html" target="tests/log/testdox.html" />-->
+  </logging>
 </phpunit>
