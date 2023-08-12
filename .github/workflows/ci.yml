@@ -39,6 +39,7 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: pdo, pdo_mysql, mbstring #optional, setup extensions
           coverage: none #optional, setup coverage driver
+          tools: phpunit:9
 
       - name: Check Version
         run: |
@@ -63,14 +64,14 @@ jobs:
 
       - name: Install dependencies (composer.lock)
         if: false == matrix.prefer-lowest
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress
 
       - name: Install dependencies (prefer-lowest)
         if: true == matrix.prefer-lowest
         run: composer update --prefer-dist --no-progress --no-suggest --prefer-lowest
 
       - name: Run test suite
-        run: composer exec -- phpunit -v
+        run: phpunit -v
         env:
           TESTS_DB_MYSQL_HOST: 127.0.0.1
           TESTS_DB_MYSQL_PORT: 13306
