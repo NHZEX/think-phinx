@@ -11,7 +11,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'breakpoint')]
+#[AsCommand(name: 'breakpoint')]
 class Breakpoint extends \Phinx\Console\Command\AbstractCommand
 {
     /**

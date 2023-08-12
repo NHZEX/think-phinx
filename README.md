@@ -54,3 +54,11 @@ return [
 - [Phinx EN](https://book.cakephp.org/phinx)
 - [Phinx CN](https://tsy12321.gitbooks.io/phinx-doc/content)
 - [Phinx Old](http://docs.phinx.org/en/latest)
+
+## Dev
+
+```bash
+## 安装构建工具
+
+composer bin php-scoper install
+```

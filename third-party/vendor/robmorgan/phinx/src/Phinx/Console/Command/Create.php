@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'create')]
+#[AsCommand(name: 'create')]
 class Create extends \Phinx\Console\Command\AbstractCommand
 {
     /**

@@ -10,7 +10,7 @@ use Phinx\Util\Util;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'list:aliases')]
+#[AsCommand(name: 'list:aliases')]
 class ListAliases extends \Phinx\Console\Command\AbstractCommand
 {
     /**

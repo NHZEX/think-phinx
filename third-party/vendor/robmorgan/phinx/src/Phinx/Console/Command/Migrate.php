@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'migrate')]
+#[AsCommand(name: 'migrate')]
 class Migrate extends \Phinx\Console\Command\AbstractCommand
 {
     /**

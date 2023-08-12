@@ -61,8 +61,23 @@ return [
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
     'patchers' => [
+        /**
+         * @see https://github.com/humbug/php-scoper/issues/841
+         */
         static function (string $filePath, string $prefix, string $contents): string {
-            // Change the contents here.
+            if (preg_match('/vendor\/composer\/autoload_real\.php$/', $filePath)) {
+                return preg_replace(
+                    [
+                        "/'Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'/",
+                        "/spl_autoload_unregister\(array\('ComposerAutoloaderInit/",
+                    ],
+                    [
+                        "'{$prefix}\\\\\\\\Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'",
+                        "spl_autoload_unregister(array('{$prefix}\\\\\\\\ComposerAutoloaderInit",
+                    ],
+                    $contents
+                );
+            }
 
             return $contents;
         },
