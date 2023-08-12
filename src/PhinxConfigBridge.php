@@ -57,7 +57,7 @@ trait PhinxConfigBridge
                 ];
             } else {
                 $environments[$name] = [
-                    'connection' => $db->connect($name)->getConnection()->connect(),
+                    'connection' => $db->connect($name)->connect(),
                     'name' => $connection['database'],
                     'table_prefix' => $connection['prefix'],
                 ];
