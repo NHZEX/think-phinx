@@ -56,6 +56,10 @@
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "@composer bin phpunit install --ansi",
+            "@composer bin php-scoper install --ansi"
+        ],
         "build-third-party": [
             "php-scoper add --working-dir=./third-party-src --output-dir=../third-party --force",
             "sleep 1",
