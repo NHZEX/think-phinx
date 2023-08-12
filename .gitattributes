@@ -1,4 +1,6 @@
+/third-party-src export-ignore
 /tests export-ignore
+/vendor-bin export-ignore
 /.github export-ignore
 /.phpunit.xml.dist export-ignore
 /codecov.yml export-ignore

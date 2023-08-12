@@ -3,6 +3,7 @@
 use HZEX\Phinx\Service;
 use think\App;
 
+//require __DIR__ . '/../third-party-build/vendor/scoper-autoload.php';
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/TestConfiguration.php';
 

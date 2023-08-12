@@ -1,0 +1,33 @@
+{
+    "name": "third-party/library",
+    "type": "library",
+    "description": "",
+    "keywords": [],
+    "license": "MIT",
+    "authors": [],
+    "require": {
+        "ext-mbstring": "*",
+        "ext-ctype": "*",
+        "robmorgan/phinx": "~0.13.4"
+    },
+    "require-dev": {
+    },
+    "replace": {
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/console": "*",
+        "symfony/config": "*"
+    },
+    "autoload": {
+    },
+    "autoload-dev": {
+    },
+    "extra": {
+    },
+    "config": {
+        "sort-packages": true,
+        "platform-check": false,
+        "allow-plugins": {},
+        "optimize-autoloader": true
+    }
+}

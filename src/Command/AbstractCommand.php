@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace HZEX\Phinx\Command;
 
+use Composer\Autoload\ClassLoader;
+use Composer\InstalledVersions;
 use HZEX\Phinx\PhinxConfigBridge;
 use InvalidArgumentException;
 use Phinx\Config\ConfigInterface;
@@ -227,11 +229,8 @@ abstract class AbstractCommand extends Command
 
     protected function getPhinxPath()
     {
-        $path = $this->app->getRootPath() . 'vendor';
-        if (!is_dir($path)) {
-            $path = vendor_path();
-        }
-        return $path . '/robmorgan/phinx/';
+        $rootDir = InstalledVersions::getInstallPath('nhzex/think-phinx');
+        return $rootDir . 'third-party/vendor/robmorgan/phinx' . DIRECTORY_SEPARATOR;
     }
 
     /**
