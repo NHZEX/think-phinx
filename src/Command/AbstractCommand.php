@@ -227,10 +227,11 @@ abstract class AbstractCommand extends Command
         }
     }
 
-    protected function getPhinxPath()
+    protected function getPhinxPath(): string
     {
         $rootDir = InstalledVersions::getInstallPath('nhzex/think-phinx');
-        return $rootDir . 'third-party/vendor/robmorgan/phinx' . DIRECTORY_SEPARATOR;
+        $rootDir = \rtrim($rootDir, '\\/');
+        return $rootDir . DIRECTORY_SEPARATOR . 'third-party/vendor/robmorgan/phinx' . DIRECTORY_SEPARATOR;
     }
 
     /**
