@@ -24,6 +24,7 @@
         "sort-packages": true,
         "platform-check": false,
         "allow-plugins": {},
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "prepend-autoloader": false
     }
 }

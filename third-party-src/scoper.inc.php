@@ -45,6 +45,11 @@ return [
         Finder::create()->append([
             'composer.json',
         ]),
+        Finder::create()
+            ->files()
+            ->ignoreVCS(true)
+            ->name('/LICENSE|LICENSE.md/')
+            ->in('vendor'),
     ],
 
     // List of excluded files, i.e. files for which the content will be left untouched.

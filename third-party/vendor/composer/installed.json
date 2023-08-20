@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "cakephp\/core",
-            "version": "4.4.16",
-            "version_normalized": "4.4.16.0",
+            "version": "4.4.17",
+            "version_normalized": "4.4.17.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/cakephp\/core.git",
-                "reference": "b101e59c4c04587c7552f66388c9fbdeadc339c6"
+                "reference": "e3eb8a531ca023292608f585d5c37c1a2d478a53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/cakephp\/core\/zipball\/b101e59c4c04587c7552f66388c9fbdeadc339c6",
-                "reference": "b101e59c4c04587c7552f66388c9fbdeadc339c6",
+                "url": "https:\/\/api.github.com\/repos\/cakephp\/core\/zipball\/e3eb8a531ca023292608f585d5c37c1a2d478a53",
+                "reference": "e3eb8a531ca023292608f585d5c37c1a2d478a53",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
                 "cakephp\/event": "To use PluginApplicationInterface or plugin applications.",
                 "league\/container": "To use Container and ServiceProvider classes"
             },
-            "time": "2023-08-04T21:00:40+00:00",
+            "time": "2023-08-17T11:42:28+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -65,8 +65,8 @@
         },
         {
             "name": "cakephp\/database",
-            "version": "4.4.16",
-            "version_normalized": "4.4.16.0",
+            "version": "4.4.17",
+            "version_normalized": "4.4.17.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/cakephp\/database.git",
@@ -124,8 +124,8 @@
         },
         {
             "name": "cakephp\/datasource",
-            "version": "4.4.16",
-            "version_normalized": "4.4.16.0",
+            "version": "4.4.17",
+            "version_normalized": "4.4.17.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/cakephp\/datasource.git",
@@ -185,8 +185,8 @@
         },
         {
             "name": "cakephp\/utility",
-            "version": "4.4.16",
-            "version_normalized": "4.4.16.0",
+            "version": "4.4.17",
+            "version_normalized": "4.4.17.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/cakephp\/utility.git",
