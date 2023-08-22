@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace HZEX\Phinx;
+namespace Zxin\Think\Phinx;
 
 use Phinx\Config\Config;
 use think\App;

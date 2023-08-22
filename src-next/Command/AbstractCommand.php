@@ -5,11 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace HZEX\Phinx\Command;
+namespace Zxin\Think\Phinx\Command;
 
-use Composer\Autoload\ClassLoader;
 use Composer\InstalledVersions;
-use HZEX\Phinx\PhinxConfigBridge;
 use InvalidArgumentException;
 use Phinx\Config\ConfigInterface;
 use Phinx\Console\Command\AbstractCommand as PhinxAbstractCommand;
@@ -22,9 +20,9 @@ use think\console\Command;
 use think\console\Input;
 use think\console\Output;
 use UnexpectedValueException;
+use Zxin\Think\Phinx\PhinxConfigBridge;
 use Zxin\Think\Symfony\Console\InputBridge;
 use Zxin\Think\Symfony\Console\OutputBridge;
-use function HZEX\Phinx\vendor_path;
 
 abstract class AbstractCommand extends Command
 {

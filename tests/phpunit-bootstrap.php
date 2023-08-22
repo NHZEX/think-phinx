@@ -1,7 +1,7 @@
 <?php
 
-use HZEX\Phinx\Service;
 use think\App;
+use Zxin\Think\Phinx\Service;
 
 //require __DIR__ . '/../third-party-build/vendor/scoper-autoload.php';
 require __DIR__ . '/../vendor/autoload.php';

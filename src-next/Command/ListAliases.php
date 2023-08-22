@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace HZEX\Phinx\Command;
+namespace Zxin\Think\Phinx\Command;
 
 use Phinx\Util\Util;
 use Symfony\Component\Console\Input\InputInterface;

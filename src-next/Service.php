@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace HZEX\Phinx;
+namespace Zxin\Think\Phinx;
 
-use HZEX\Phinx\Command\Breakpoint;
-use HZEX\Phinx\Command\Create;
-use HZEX\Phinx\Command\ListAliases;
-use HZEX\Phinx\Command\Migrate;
-use HZEX\Phinx\Command\Rollback;
-use HZEX\Phinx\Command\SeedCreate;
-use HZEX\Phinx\Command\SeedRun;
-use HZEX\Phinx\Command\Status;
-use HZEX\Phinx\Command\Test;
+use Zxin\Think\Phinx\Command\Breakpoint;
+use Zxin\Think\Phinx\Command\Create;
+use Zxin\Think\Phinx\Command\ListAliases;
+use Zxin\Think\Phinx\Command\Migrate;
+use Zxin\Think\Phinx\Command\Rollback;
+use Zxin\Think\Phinx\Command\SeedCreate;
+use Zxin\Think\Phinx\Command\SeedRun;
+use Zxin\Think\Phinx\Command\Status;
+use Zxin\Think\Phinx\Command\Test;
 
 class Service extends \think\Service
 {

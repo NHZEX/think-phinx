@@ -35,11 +35,11 @@
     },
     "autoload": {
         "psr-4": {
-            "HZEX\\Phinx\\": "src"
+            "HZEX\\Phinx\\": "src",
+            "Zxin\\Think\\Phinx\\": "src-next"
         },
         "files": [
-            "third-party/vendor/scoper-autoload.php",
-            "src/helper.php"
+            "third-party/vendor/scoper-autoload.php"
         ]
     },
     "autoload-dev": {
@@ -50,7 +50,7 @@
     "extra": {
         "think": {
             "services": [
-                "HZEX\\Phinx\\Service"
+                "Zxin\\Think\\Phinx\\Service"
             ],
             "config": {
                 "phinx": "config/phinx.php"

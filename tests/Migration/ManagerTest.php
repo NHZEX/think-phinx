@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Test\Phinx\Migration;
 
-use HZEX\Phinx\PhinxConfigBridge;
 use Phinx\Console\Command\AbstractCommand;
 use Phinx\Db\Adapter\AdapterInterface;
 use Phinx\Migration\Manager;
@@ -12,6 +11,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use think\console\Input;
 use think\console\Output;
+use Zxin\Think\Phinx\PhinxConfigBridge;
 use function app;
 use function count;
 use function mkdir;
