@@ -5,7 +5,9 @@
     "keywords": [
         "thinkphp",
         "thinkphp6",
-        "phinx"
+        "thinkphp8",
+        "phinx",
+        "migration"
     ],
     "license": "MIT",
     "authors": [
