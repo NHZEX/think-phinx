@@ -1,7 +1,7 @@
 {
     "name": "nhzex/think-phinx",
     "type": "library",
-    "description": "",
+    "description": "Phinx integration for thinkphp",
     "keywords": [
         "thinkphp",
         "thinkphp6",
