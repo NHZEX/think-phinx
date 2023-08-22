@@ -5,7 +5,7 @@ namespace HZEX\Phinx;
 
 /**
  * Class Schema
- * @package HZEX\Phinx
+ * @deprecated use \Zxin\Phinx\Schema\Schema
  */
 class Schema extends \Zxin\Phinx\Schema\Schema
 {
