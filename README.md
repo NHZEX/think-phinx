@@ -1,6 +1,5 @@
 # Think-Phinx
-thinkphp 6.0, 8.0 phinx 数据迁移  
-内置 phinx: 0.13.4  
+thinkphp 6.0, 8.0 phinx 数据迁移
 
 [![Latest Stable Version](https://poser.pugx.org/nhzex/think-phinx/v/stable)](https://packagist.org/packages/nhzex/think-phinx)
 [![License](https://poser.pugx.org/nhzex/think-phinx/license)](https://packagist.org/packages/nhzex/think-phinx)
@@ -12,9 +11,14 @@ composer require nhzex/think-phinx
 
 ## 重大变更
 
-> 自 4.0 起采用捆绑方式打包 phinx，不再污染全局环境，并内置 cakephp 依赖项，解决全局函数污染问题  
+> 自 4.0 起采用捆绑方式打包 phinx，不再污染全局环境，并内置 cakephp 依赖项，解决全局函数被污染问题！  
 > 
 > ~~目前版本的`phinx`将导致`env`函数被覆盖。如果使用到该函数，请在`composer`加载前重新声明。([phinx#1647](https://github.com/cakephp/phinx/issues/1647))~~  
+
+|   版本   | phinx  | 状态  |
+|:------:|:------:|:---:|
+| v4.0.* | 0.13.4 | 已发布 |
+| v4.1.* | 0.14.0 | RC  |
 
 ## Use
 ```
