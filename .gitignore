@@ -9,3 +9,4 @@
 /yarn-error.log
 /.phpunit.result.cache
 /composer.lock
+/vendor-bin/**/composer.lock
