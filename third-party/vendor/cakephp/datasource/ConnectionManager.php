@@ -41,7 +41,7 @@ class ConnectionManager
     /**
      * A map of connection aliases.
      *
-     * @var array<string>
+     * @var array<string, string>
      */
     protected static $_aliasMap = [];
     /**
@@ -54,7 +54,7 @@ class ConnectionManager
     /**
      * The ConnectionRegistry used by the manager.
      *
-     * @var \Cake\Datasource\ConnectionRegistry
+     * @var \Cake\Datasource\ConnectionRegistry|null
      */
     protected static $_registry;
     /**
@@ -155,6 +155,15 @@ class ConnectionManager
         unset(static::$_aliasMap[$alias]);
     }
     /**
+     * Returns the current connection aliases and what they alias.
+     *
+     * @return array<string, string>
+     */
+    public static function aliases() : array
+    {
+        return static::$_aliasMap;
+    }
+    /**
      * Get a connection.
      *
      * If the connection has not been constructed an instance will be added
@@ -163,8 +172,8 @@ class ConnectionManager
      * as second parameter.
      *
      * @param string $name The connection name.
-     * @param bool $useAliases Set to false to not use aliased connections.
-     * @return \Cake\Datasource\ConnectionInterface A connection object.
+     * @param bool $useAliases Whether connection aliases are used
+     * @return \Cake\Datasource\ConnectionInterface
      * @throws \Cake\Datasource\Exception\MissingDatasourceConfigException When config
      * data is missing.
      */
@@ -173,10 +182,9 @@ class ConnectionManager
         if ($useAliases && isset(static::$_aliasMap[$name])) {
             $name = static::$_aliasMap[$name];
         }
-        if (empty(static::$_config[$name])) {
+        if (!isset(static::$_config[$name])) {
             throw new MissingDatasourceConfigException(['name' => $name]);
         }
-        /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (!isset(static::$_registry)) {
             static::$_registry = new ConnectionRegistry();
         }

@@ -19,6 +19,8 @@ namespace _Z_PhinxVendor\Cake\Utility;
 use _Z_PhinxVendor\Cake\Core\Exception\CakeException;
 use InvalidArgumentException;
 use Transliterator;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
+use function _Z_PhinxVendor\Cake\I18n\__d;
 /**
  * Text handling methods.
  */

@@ -18,6 +18,7 @@ namespace _Z_PhinxVendor\Cake\Core\Configure;
 
 use _Z_PhinxVendor\Cake\Core\Exception\CakeException;
 use _Z_PhinxVendor\Cake\Core\Plugin;
+use function _Z_PhinxVendor\Cake\Core\pluginSplit;
 /**
  * Trait providing utility methods for file based config engines.
  */

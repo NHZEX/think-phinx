@@ -19,6 +19,7 @@ namespace _Z_PhinxVendor\Cake\Database\Type;
 use _Z_PhinxVendor\Cake\Database\DriverInterface;
 use InvalidArgumentException;
 use PDO;
+use function _Z_PhinxVendor\Cake\Core\getTypeName;
 /**
  * Bool type converter.
  *

@@ -26,5 +26,5 @@ class PageOutOfBoundsException extends CakeException
     protected $_messageTemplate = 'Page number %s could not be found.';
 }
 // phpcs:disable
-\class_exists('_Z_PhinxVendor\\Cake\\Datasource\\Exception\\PageOutOfBoundsException');
+\class_alias('_Z_PhinxVendor\\Cake\\Datasource\\Paging\\Exception\\PageOutOfBoundsException', '_Z_PhinxVendor\\Cake\\Datasource\\Exception\\PageOutOfBoundsException');
 // phpcs:enable

@@ -29,8 +29,6 @@ use _Z_PhinxVendor\Psr\SimpleCache\CacheInterface;
  *   already created tables. {@see \Cake\Database\Connnection::supportsDynamicConstraints()}
  * @method \Cake\Database\Schema\Collection getSchemaCollection() Gets a Schema\Collection object for this connection.
  *    {@see \Cake\Database\Connnection::getSchemaCollection()}
- * @method \Cake\Database\Query newQuery() Create a new Query instance for this connection.
- *    {@see \Cake\Database\Connnection::newQuery()}
  * @method \Cake\Database\StatementInterface prepare($sql) Prepares a SQL statement to be executed.
  *    {@see \Cake\Database\Connnection::prepare()}
  * @method \Cake\Database\StatementInterface execute($query, $params = [], array $types = []) Executes a query using
@@ -41,6 +39,14 @@ use _Z_PhinxVendor\Psr\SimpleCache\CacheInterface;
  */
 interface ConnectionInterface extends LoggerAwareInterface
 {
+    /**
+     * @var string
+     */
+    public const ROLE_WRITE = 'write';
+    /**
+     * @var string
+     */
+    public const ROLE_READ = 'read';
     /**
      * Gets the current logger object.
      *

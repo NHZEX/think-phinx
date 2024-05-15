@@ -47,6 +47,10 @@ abstract class PdoAdapter extends \Phinx\Db\Adapter\AbstractAdapter implements \
      */
     protected $connection;
     /**
+     * @var \Cake\Database\Connection|null
+     */
+    protected $decoratedConnection;
+    /**
      * Writes a message to stdout if verbose output is on
      *
      * @param string $message The message to show
@@ -159,12 +163,29 @@ abstract class PdoAdapter extends \Phinx\Db\Adapter\AbstractAdapter implements \
         return $result ? $stmt->rowCount() : $result;
     }
     /**
+     * Returns the config for a new decorated connection.
+     *
+     * @return array
+     */
+    protected abstract function getDecoratedConnectionConfig() : array;
+    /**
      * Returns the Cake\Database connection object using the same underlying
      * PDO object as this connection.
      *
      * @return \Cake\Database\Connection
      */
-    public abstract function getDecoratedConnection() : Connection;
+    public function getDecoratedConnection() : Connection
+    {
+        if (isset($this->decoratedConnection)) {
+            return $this->decoratedConnection;
+        }
+        $config = $this->getDecoratedConnectionConfig();
+        if (!isset($config['driver'])) {
+            throw new RuntimeException('Decorated connection config is missing the driver.');
+        }
+        $config['driver']->setConnection($this->connection);
+        return $this->decoratedConnection = new Connection($config);
+    }
     /**
      * @inheritDoc
      */
@@ -466,7 +487,7 @@ abstract class PdoAdapter extends \Phinx\Db\Adapter\AbstractAdapter implements \
     {
         if ($default instanceof Literal) {
             $default = (string) $default;
-        } elseif (\is_string($default) && \strpos($default, 'CURRENT_TIMESTAMP') !== 0) {
+        } elseif (\is_string($default) && \stripos($default, 'CURRENT_TIMESTAMP') !== 0) {
             // Ensure a defaults of CURRENT_TIMESTAMP(3) is not quoted.
             $default = $this->getConnection()->quote($default);
         } elseif (\is_bool($default)) {

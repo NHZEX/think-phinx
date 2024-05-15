@@ -477,6 +477,5 @@ class MysqlSchemaDialect extends SchemaDialect
     }
 }
 // phpcs:disable
-// Add backwards compatible alias.
 \class_alias('_Z_PhinxVendor\\Cake\\Database\\Schema\\MysqlSchemaDialect', '_Z_PhinxVendor\\Cake\\Database\\Schema\\MysqlSchema');
 // phpcs:enable

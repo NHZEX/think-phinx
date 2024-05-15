@@ -58,7 +58,6 @@ class SchemaCache
             $tables = $this->_schema->listTables();
         }
         foreach ($tables as $table) {
-            /** @psalm-suppress PossiblyNullArgument */
             $this->_schema->describe($table, ['forceRefresh' => \true]);
         }
         return $tables;
@@ -78,7 +77,6 @@ class SchemaCache
         }
         $cacher = $this->_schema->getCacher();
         foreach ($tables as $table) {
-            /** @psalm-suppress PossiblyNullArgument */
             $key = $this->_schema->cacheKey($table);
             $cacher->delete($key);
         }

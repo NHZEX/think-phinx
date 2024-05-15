@@ -158,3 +158,6 @@ trait ContainerStubTrait
         $this->containerServices = [];
     }
 }
+// phpcs:disable
+\class_alias('_Z_PhinxVendor\\Cake\\Core\\TestSuite\\ContainerStubTrait', '_Z_PhinxVendor\\Cake\\TestSuite\\ContainerStubTrait');
+// phpcs:enable

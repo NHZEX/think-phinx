@@ -19,6 +19,8 @@ namespace _Z_PhinxVendor\Cake\Datasource;
 use _Z_PhinxVendor\Cake\Datasource\Locator\LocatorInterface;
 use _Z_PhinxVendor\Cake\ORM\Locator\TableLocator;
 use InvalidArgumentException;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
+use function _Z_PhinxVendor\Cake\Core\getTypeName;
 /**
  * Class FactoryLocator
  */

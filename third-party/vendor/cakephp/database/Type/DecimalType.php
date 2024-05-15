@@ -21,6 +21,7 @@ use _Z_PhinxVendor\Cake\I18n\Number;
 use InvalidArgumentException;
 use PDO;
 use RuntimeException;
+use function _Z_PhinxVendor\Cake\Core\getTypeName;
 /**
  * Decimal type converter.
  *

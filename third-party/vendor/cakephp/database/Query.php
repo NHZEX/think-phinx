@@ -30,6 +30,7 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use RuntimeException;
 use Throwable;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * This class represents a Relational database SQL Query. A query can be of
  * different types like select, update, insert and delete. Exposes the methods
@@ -57,6 +58,12 @@ class Query implements ExpressionInterface, IteratorAggregate
      * @var \Cake\Database\Connection
      */
     protected $_connection;
+    /**
+     * Connection role ('read' or 'write')
+     *
+     * @var string
+     */
+    protected $connectionRole = Connection::ROLE_WRITE;
     /**
      * Type of this query (select, insert, update, delete).
      *
@@ -137,6 +144,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * are enabled.
      *
      * @var bool
+     * @deprecated 4.5.0 Results will always be buffered in 5.0.
      */
     protected $_useBufferedResults = \true;
     /**
@@ -181,6 +189,15 @@ class Query implements ExpressionInterface, IteratorAggregate
     public function getConnection() : Connection
     {
         return $this->_connection;
+    }
+    /**
+     * Returns the connection role ('read' or 'write')
+     *
+     * @return string
+     */
+    public function getConnectionRole() : string
+    {
+        return $this->connectionRole;
     }
     /**
      * Compiles the SQL representation of this query and executes it using the
@@ -260,7 +277,8 @@ class Query implements ExpressionInterface, IteratorAggregate
             $binder = $this->getValueBinder();
             $binder->resetCount();
         }
-        return $this->getConnection()->compileQuery($this, $binder);
+        $connection = $this->getConnection();
+        return $connection->getDriver($this->getConnectionRole())->compileQuery($this, $binder)[1];
     }
     /**
      * Will iterate over every specified part. Traversing functions can aggregate
@@ -370,7 +388,7 @@ class Query implements ExpressionInterface, IteratorAggregate
             $this->_parts['with'] = [];
         }
         if ($cte instanceof Closure) {
-            $query = $this->getConnection()->newQuery();
+            $query = $this->getConnection()->selectQuery();
             $cte = $cte(new CommonTableExpression(), $query);
             if (!$cte instanceof CommonTableExpression) {
                 throw new RuntimeException('You must return a `CommonTableExpression` from a Closure passed to `with()`.');
@@ -771,7 +789,6 @@ class Query implements ExpressionInterface, IteratorAggregate
      * to use for joining.
      * @param string $type the join type to use
      * @return array
-     * @psalm-suppress InvalidReturnType
      */
     protected function _makeJoin($table, $conditions, $type) : array
     {
@@ -782,7 +799,6 @@ class Query implements ExpressionInterface, IteratorAggregate
         }
         /**
          * @psalm-suppress InvalidArrayOffset
-         * @psalm-suppress InvalidReturnStatement
          */
         return [$alias => ['table' => $table, 'conditions' => $conditions, 'type' => $type]];
     }
@@ -1965,9 +1981,13 @@ class Query implements ExpressionInterface, IteratorAggregate
      *
      * @param bool $enable Whether to enable buffering
      * @return $this
+     * @deprecated 4.5.0 Results will always be buffered in 5.0.
      */
     public function enableBufferedResults(bool $enable = \true)
     {
+        if (!$enable) {
+            deprecationWarning('4.5.0 enableBufferedResults() is deprecated. Results will always be buffered in 5.0.');
+        }
         $this->_dirty();
         $this->_useBufferedResults = $enable;
         return $this;
@@ -1979,6 +1999,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * remembered for future iterations.
      *
      * @return $this
+     * @deprecated 4.5.0 Results will always be buffered in 5.0.
      */
     public function disableBufferedResults()
     {
@@ -1997,6 +2018,7 @@ class Query implements ExpressionInterface, IteratorAggregate
      * remembered for future iterations.
      *
      * @return bool
+     * @deprecated 4.5.0 Results will always be buffered in 5.0.
      */
     public function isBufferedResultsEnabled() : bool
     {
@@ -2081,7 +2103,7 @@ class Query implements ExpressionInterface, IteratorAggregate
     protected function _decorateStatement(StatementInterface $statement)
     {
         $typeMap = $this->getSelectTypeMap();
-        $driver = $this->getConnection()->getDriver();
+        $driver = $this->getConnection()->getDriver($this->connectionRole);
         if ($this->typeCastEnabled && $typeMap->toArray()) {
             $statement = new CallbackStatement($statement, $driver, new FieldTypeConverter($typeMap, $driver));
         }
@@ -2159,7 +2181,6 @@ class Query implements ExpressionInterface, IteratorAggregate
                             }
                         }
                     } elseif ($piece instanceof ExpressionInterface) {
-                        /** @psalm-suppress PossiblyUndefinedMethod */
                         $this->_parts[$name][$i] = clone $piece;
                     }
                 }
@@ -2203,5 +2224,19 @@ class Query implements ExpressionInterface, IteratorAggregate
             \restore_error_handler();
         }
         return ['(help)' => 'This is a Query object, to get the results execute or iterate it.', 'sql' => $sql, 'params' => $params, 'defaultTypes' => $this->getDefaultTypes(), 'decorators' => \count($this->_resultDecorators), 'executed' => $this->_iterator ? \true : \false];
+    }
+    /**
+     * Helper for Query deprecation methods.
+     *
+     * @param string $method The method that is invalid.
+     * @param string $message An additional message.
+     * @return void
+     * @internal
+     */
+    protected function _deprecatedMethod($method, $message = '')
+    {
+        $class = static::class;
+        $text = "As of 4.5.0 calling {$method}() on {$class} is deprecated. " . $message;
+        deprecationWarning($text);
     }
 }

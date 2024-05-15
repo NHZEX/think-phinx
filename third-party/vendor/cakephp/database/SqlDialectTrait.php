@@ -3,5 +3,6 @@
 declare (strict_types=1);
 namespace _Z_PhinxVendor;
 
-// @deprecated 4.1.0 Add backwards compatible alias.
-\class_alias('_Z_PhinxVendor\\Cake\\Database\\Driver\\SqlDialectTrait', '_Z_PhinxVendor\\Cake\\Database\\SqlDialectTrait');
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
+deprecationWarning('Since 4.1.0: Cake\\Database\\SqlDialectTrait is deprecated. ' . 'Use Cake\\Database\\Driver\\SqlDialectTrait instead.');
+\class_exists('_Z_PhinxVendor\\Cake\\Database\\Driver\\SqlDialectTrait');

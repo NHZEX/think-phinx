@@ -16,6 +16,7 @@ declare (strict_types=1);
  */
 namespace _Z_PhinxVendor\Cake\Database\Type;
 
+use _Z_PhinxVendor\Cake\Chronos\ChronosDate;
 use _Z_PhinxVendor\Cake\Database\DriverInterface;
 use _Z_PhinxVendor\Cake\I18n\FrozenTime;
 use _Z_PhinxVendor\Cake\I18n\I18nDateTimeInterface;
@@ -28,6 +29,7 @@ use Exception;
 use InvalidArgumentException;
 use PDO;
 use RuntimeException;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * Datetime type converter.
  *
@@ -269,6 +271,9 @@ class DateTimeType extends BaseType implements BatchCastingInterface
         if ($value instanceof DateTimeInterface) {
             if ($value instanceof DateTime) {
                 $value = clone $value;
+            }
+            if ($value instanceof ChronosDate) {
+                return $value;
             }
             /** @var \Datetime|\DateTimeImmutable $value */
             return $value->setTimezone($this->defaultTimezone);

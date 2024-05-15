@@ -30,6 +30,7 @@ use _Z_PhinxVendor\Cake\Database\StatementInterface;
 use InvalidArgumentException;
 use PDO;
 use RuntimeException;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * Class Sqlite
  */

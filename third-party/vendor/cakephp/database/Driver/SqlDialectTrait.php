@@ -265,3 +265,6 @@ trait SqlDialectTrait
         return 'ROLLBACK TO SAVEPOINT LEVEL' . $name;
     }
 }
+// phpcs:disable
+\class_alias('_Z_PhinxVendor\\Cake\\Database\\Driver\\SqlDialectTrait', '_Z_PhinxVendor\\Cake\\Database\\SqlDialectTrait');
+// phpcs:enable

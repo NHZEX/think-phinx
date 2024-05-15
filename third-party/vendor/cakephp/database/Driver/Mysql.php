@@ -23,6 +23,7 @@ use _Z_PhinxVendor\Cake\Database\Schema\SchemaDialect;
 use _Z_PhinxVendor\Cake\Database\Statement\MysqlStatement;
 use _Z_PhinxVendor\Cake\Database\StatementInterface;
 use PDO;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * MySQL Driver
  */

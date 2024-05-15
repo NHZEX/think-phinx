@@ -16,7 +16,7 @@ declare (strict_types=1);
  */
 namespace _Z_PhinxVendor\Cake\Database\Expression;
 
-use _Z_PhinxVendor\Cake\Chronos\Date;
+use _Z_PhinxVendor\Cake\Chronos\ChronosDate;
 use _Z_PhinxVendor\Cake\Chronos\MutableDate;
 use _Z_PhinxVendor\Cake\Database\ExpressionInterface;
 use _Z_PhinxVendor\Cake\Database\Query;
@@ -49,7 +49,7 @@ trait CaseExpressionTrait
             $type = 'float';
         } elseif (\is_bool($value)) {
             $type = 'boolean';
-        } elseif ($value instanceof Date || $value instanceof MutableDate) {
+        } elseif ($value instanceof ChronosDate || $value instanceof MutableDate) {
             $type = 'date';
         } elseif ($value instanceof DateTimeInterface) {
             $type = 'datetime';

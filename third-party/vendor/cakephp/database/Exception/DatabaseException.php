@@ -28,5 +28,5 @@ class DatabaseException extends CakeException
     protected $_messageTemplate = '%s';
 }
 // phpcs:disable
-\class_exists('_Z_PhinxVendor\\Cake\\Database\\Exception');
+\class_alias('_Z_PhinxVendor\\Cake\\Database\\Exception\\DatabaseException', '_Z_PhinxVendor\\Cake\\Database\\Exception');
 // phpcs:enable

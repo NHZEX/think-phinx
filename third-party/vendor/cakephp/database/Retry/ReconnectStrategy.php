@@ -81,7 +81,7 @@ class ReconnectStrategy implements RetryStrategyInterface
         }
         try {
             // Make sure we free any resources associated with the old connection
-            $this->connection->disconnect();
+            $this->connection->getDriver()->disconnect();
         } catch (Exception $e) {
         }
         try {

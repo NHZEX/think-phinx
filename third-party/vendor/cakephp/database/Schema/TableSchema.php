@@ -19,6 +19,7 @@ namespace _Z_PhinxVendor\Cake\Database\Schema;
 use _Z_PhinxVendor\Cake\Database\Connection;
 use _Z_PhinxVendor\Cake\Database\Exception\DatabaseException;
 use _Z_PhinxVendor\Cake\Database\TypeFactory;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * Represents a single table in a database schema.
  *

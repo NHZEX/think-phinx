@@ -27,6 +27,7 @@ use Closure;
 use InvalidArgumentException;
 use PDO;
 use PDOException;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * Represents a database driver containing all specificities for
  * a database engine including its SQL dialect.
@@ -95,6 +96,15 @@ abstract class Driver implements DriverInterface
         if (!empty($config['quoteIdentifiers'])) {
             $this->enableAutoQuoting();
         }
+    }
+    /**
+     * Get the configuration data used to create the driver.
+     *
+     * @return array<string, mixed>
+     */
+    public function config() : array
+    {
+        return $this->_config;
     }
     /**
      * Establishes a connection to the database server
@@ -421,6 +431,15 @@ abstract class Driver implements DriverInterface
         return $this->connectRetries;
     }
     /**
+     * Returns the connection role this driver performs.
+     *
+     * @return string
+     */
+    public function getRole() : string
+    {
+        return $this->_config['_role'] ?? Connection::ROLE_WRITE;
+    }
+    /**
      * Destructor
      */
     public function __destruct()
@@ -436,6 +455,6 @@ abstract class Driver implements DriverInterface
      */
     public function __debugInfo() : array
     {
-        return ['connected' => $this->_connection !== null];
+        return ['connected' => $this->_connection !== null, 'role' => $this->getRole()];
     }
 }

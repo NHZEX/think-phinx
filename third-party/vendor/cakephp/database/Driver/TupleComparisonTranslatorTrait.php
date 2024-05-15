@@ -76,7 +76,7 @@ trait TupleComparisonTranslatorTrait
         } else {
             $typeMap = [];
         }
-        $surrogate = $query->getConnection()->newQuery()->select($true);
+        $surrogate = $query->getConnection()->selectQuery($true);
         if (!\is_array(\current($value))) {
             $value = [$value];
         }

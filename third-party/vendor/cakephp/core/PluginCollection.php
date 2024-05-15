@@ -15,6 +15,7 @@ declare (strict_types=1);
  */
 namespace _Z_PhinxVendor\Cake\Core;
 
+use _Z_PhinxVendor\Cake\Core\Exception\CakeException;
 use _Z_PhinxVendor\Cake\Core\Exception\MissingPluginException;
 use Countable;
 use Generator;
@@ -33,6 +34,8 @@ use Iterator;
  *
  * While its implementation supported nested iteration it does not
  * support using `continue` or `break` inside loops.
+ *
+ * @template-implements \Iterator<string, \Cake\Core\PluginInterface>
  */
 class PluginCollection implements Iterator, Countable
 {
@@ -209,6 +212,9 @@ class PluginCollection implements Iterator, Countable
      */
     public function create(string $name, array $config = []) : PluginInterface
     {
+        if ($name === '') {
+            throw new CakeException('Cannot create a plugin with empty name');
+        }
         if (\strpos($name, '\\') !== \false) {
             /** @var \Cake\Core\PluginInterface */
             return new $name($config);

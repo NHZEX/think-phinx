@@ -292,6 +292,5 @@ abstract class SchemaDialect
     public abstract function truncateTableSql(TableSchema $schema) : array;
 }
 // phpcs:disable
-// Add backwards compatible alias.
 \class_alias('_Z_PhinxVendor\\Cake\\Database\\Schema\\SchemaDialect', '_Z_PhinxVendor\\Cake\\Database\\Schema\\BaseSchema');
 // phpcs:enable

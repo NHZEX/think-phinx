@@ -3,5 +3,6 @@
 declare (strict_types=1);
 namespace _Z_PhinxVendor;
 
-// @deprecated 4.1.0 Load new class location and alias for old location
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
+deprecationWarning('Since 4.1.0: Cake\\Database\\Schema\\SqliteSchema is deprecated. ' . 'Use Cake\\Database\\Schema\\SqliteSchemaDialect instead.');
 \class_exists('_Z_PhinxVendor\\Cake\\Database\\Schema\\SqliteSchemaDialect');

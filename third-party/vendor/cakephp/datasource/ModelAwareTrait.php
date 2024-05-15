@@ -20,14 +20,15 @@ use _Z_PhinxVendor\Cake\Datasource\Exception\MissingModelException;
 use _Z_PhinxVendor\Cake\Datasource\Locator\LocatorInterface;
 use InvalidArgumentException;
 use UnexpectedValueException;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
+use function _Z_PhinxVendor\Cake\Core\getTypeName;
+use function _Z_PhinxVendor\Cake\Core\pluginSplit;
 /**
  * Provides functionality for loading table classes
  * and other repositories onto properties of the host object.
  *
  * Example users of this trait are Cake\Controller\Controller and
  * Cake\Console\Shell.
- *
- * @deprecated 4.3.0 Use `Cake\ORM\Locator\LocatorAwareTrait` instead.
  */
 trait ModelAwareTrait
 {
@@ -43,7 +44,6 @@ trait ModelAwareTrait
      * controller name.
      *
      * @var string|null
-     * @deprecated 4.3.0 Use `Cake\ORM\Locator\LocatorAwareTrait::$defaultTable` instead.
      */
     protected $modelClass;
     /**
@@ -73,10 +73,11 @@ trait ModelAwareTrait
         }
     }
     /**
-     * Loads and constructs repository objects required by this object
+     * Fetch or construct a model and set it to a property on this object.
      *
-     * Typically used to load ORM Table objects as required. Can
-     * also be used to load other types of repository objects your application uses.
+     * Uses a modelFactory based on `$modelType` to fetch and construct a `RepositoryInterface`
+     * and set it as a property on the current object. The default `modelType`
+     * can be defined with `setModelType()`.
      *
      * If a repository provider does not return an object a MissingModelException will
      * be thrown.
@@ -88,7 +89,7 @@ trait ModelAwareTrait
      * @throws \Cake\Datasource\Exception\MissingModelException If the model class cannot be found.
      * @throws \UnexpectedValueException If $modelClass argument is not provided
      *   and ModelAwareTrait::$modelClass property value is empty.
-     * @deprecated 4.3.0 Use `LocatorAwareTrait::fetchTable()` instead.
+     * @deprecated 4.3.0 Prefer `LocatorAwareTrait::fetchTable()` or `ModelAwareTrait::fetchModel()` instead.
      */
     public function loadModel(?string $modelClass = null, ?string $modelType = null) : RepositoryInterface
     {
@@ -106,6 +107,9 @@ trait ModelAwareTrait
             $alias = \substr($modelClass, \strrpos($modelClass, '\\') + 1, -\strlen($modelType));
             $modelClass = $alias;
         }
+        if (!\property_exists($this, $alias)) {
+            deprecationWarning('4.5.0 - Dynamic properties will be removed in PHP 8.2. ' . "Add `public \${$alias} = null;` to your class definition or use `#[AllowDynamicProperties]` attribute.");
+        }
         if (isset($this->{$alias})) {
             return $this->{$alias};
         }
@@ -119,6 +123,52 @@ trait ModelAwareTrait
             throw new MissingModelException([$modelClass, $modelType]);
         }
         return $this->{$alias};
+    }
+    /**
+     * Fetch or construct a model instance from a locator.
+     *
+     * Uses a modelFactory based on `$modelType` to fetch and construct a `RepositoryInterface`
+     * and return it. The default `modelType` can be defined with `setModelType()`.
+     *
+     * Unlike `loadModel()` this method will *not* set an object property.
+     *
+     * If a repository provider does not return an object a MissingModelException will
+     * be thrown.
+     *
+     * @param string|null $modelClass Name of model class to load. Defaults to $this->modelClass.
+     *  The name can be an alias like `'Post'` or FQCN like `App\Model\Table\PostsTable::class`.
+     * @param string|null $modelType The type of repository to load. Defaults to the getModelType() value.
+     * @return \Cake\Datasource\RepositoryInterface The model instance created.
+     * @throws \Cake\Datasource\Exception\MissingModelException If the model class cannot be found.
+     * @throws \UnexpectedValueException If $modelClass argument is not provided
+     *   and ModelAwareTrait::$modelClass property value is empty.
+     */
+    public function fetchModel(?string $modelClass = null, ?string $modelType = null) : RepositoryInterface
+    {
+        $modelClass = $modelClass ?? $this->modelClass;
+        if (empty($modelClass)) {
+            throw new UnexpectedValueException('Default modelClass is empty');
+        }
+        $modelType = $modelType ?? $this->getModelType();
+        $options = [];
+        if (\strpos($modelClass, '\\') === \false) {
+            [, $alias] = pluginSplit($modelClass, \true);
+        } else {
+            $options['className'] = $modelClass;
+            /** @psalm-suppress PossiblyFalseOperand */
+            $alias = \substr($modelClass, \strrpos($modelClass, '\\') + 1, -\strlen($modelType));
+            $modelClass = $alias;
+        }
+        $factory = $this->_modelFactories[$modelType] ?? FactoryLocator::get($modelType);
+        if ($factory instanceof LocatorInterface) {
+            $instance = $factory->get($modelClass, $options);
+        } else {
+            $instance = $factory($modelClass, $options);
+        }
+        if ($instance) {
+            return $instance;
+        }
+        throw new MissingModelException([$modelClass, $modelType]);
     }
     /**
      * Override a existing callable to generate repositories of a given type.

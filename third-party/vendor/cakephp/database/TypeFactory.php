@@ -128,3 +128,6 @@ class TypeFactory
         static::$_builtTypes = [];
     }
 }
+// phpcs:disable
+\class_alias('_Z_PhinxVendor\\Cake\\Database\\TypeFactory', '_Z_PhinxVendor\\Cake\\Database\\Type');
+// phpcs:enable

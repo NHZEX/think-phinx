@@ -8,7 +8,7 @@
     "require": {
         "ext-mbstring": "*",
         "ext-ctype": "*",
-        "robmorgan/phinx": "~0.13.4"
+        "robmorgan/phinx": "~0.14.0"
     },
     "require-dev": {
     },

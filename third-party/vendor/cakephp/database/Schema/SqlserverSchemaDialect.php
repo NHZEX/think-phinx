@@ -483,6 +483,5 @@ class SqlserverSchemaDialect extends SchemaDialect
     }
 }
 // phpcs:disable
-// Add backwards compatible alias.
 \class_alias('_Z_PhinxVendor\\Cake\\Database\\Schema\\SqlserverSchemaDialect', '_Z_PhinxVendor\\Cake\\Database\\Schema\\SqlserverSchema');
 // phpcs:enable

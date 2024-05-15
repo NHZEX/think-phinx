@@ -23,6 +23,7 @@ use _Z_PhinxVendor\Cake\Database\ValueBinder;
 use Closure;
 use Countable;
 use InvalidArgumentException;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * Represents a SQL Query expression. Internally it stores a tree of
  * expressions that can be compiled by converting this object to string
@@ -110,11 +111,7 @@ class QueryExpression implements ExpressionInterface, Countable
      */
     public function add($conditions, array $types = [])
     {
-        if (\is_string($conditions)) {
-            $this->_conditions[] = $conditions;
-            return $this;
-        }
-        if ($conditions instanceof ExpressionInterface) {
+        if (\is_string($conditions) || $conditions instanceof ExpressionInterface) {
             $this->_conditions[] = $conditions;
             return $this;
         }

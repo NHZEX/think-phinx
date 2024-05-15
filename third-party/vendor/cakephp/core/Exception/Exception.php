@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace _Z_PhinxVendor;
 
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,4 +15,5 @@ namespace _Z_PhinxVendor;
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-\class_alias('_Z_PhinxVendor\\Cake\\Core\\Exception\\CakeException', '_Z_PhinxVendor\\Cake\\Core\\Exception\\Exception');
+deprecationWarning('Since 4.2.0: Cake\\Core\\Exception\\Exception is deprecated.' . 'Use Cake\\Core\\Exception\\CakeException instead.');
+\class_exists('_Z_PhinxVendor\\Cake\\Core\\Exception\\CakeException');

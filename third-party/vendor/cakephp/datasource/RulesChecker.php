@@ -102,7 +102,7 @@ class RulesChecker
     public function __construct(array $options = [])
     {
         $this->_options = $options;
-        $this->_useI18n = \function_exists('_Z_PhinxVendor\\__d');
+        $this->_useI18n = \function_exists('_Z_PhinxVendor\\Cake\\I18n\\__d');
     }
     /**
      * Adds a rule that will be applied to the entity both on create and update

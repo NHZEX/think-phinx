@@ -21,6 +21,7 @@ use _Z_PhinxVendor\Cake\Database\Exception\DatabaseException;
 use _Z_PhinxVendor\Cake\Database\Statement\StatementDecorator;
 use Exception;
 use _Z_PhinxVendor\Psr\Log\LoggerInterface;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * Statement decorator used to
  *

@@ -6,7 +6,6 @@
  */
 namespace Phinx\Db\Adapter;
 
-use _Z_PhinxVendor\Cake\Database\Connection;
 use _Z_PhinxVendor\Cake\Database\Driver\Mysql as MysqlDriver;
 use InvalidArgumentException;
 use PDO;
@@ -348,11 +347,11 @@ class MysqlAdapter extends \Phinx\Db\Adapter\PdoAdapter
     public function getColumns(string $tableName) : array
     {
         $columns = [];
-        $rows = $this->fetchAll(\sprintf('SHOW COLUMNS FROM %s', $this->quoteTableName($tableName)));
+        $rows = $this->fetchAll(\sprintf('SHOW FULL COLUMNS FROM %s', $this->quoteTableName($tableName)));
         foreach ($rows as $columnInfo) {
             $phinxType = $this->getPhinxType($columnInfo['Type']);
             $column = new Column();
-            $column->setName($columnInfo['Field'])->setNull($columnInfo['Null'] !== 'NO')->setType($phinxType['name'])->setSigned(\strpos($columnInfo['Type'], 'unsigned') === \false)->setLimit($phinxType['limit'])->setScale($phinxType['scale']);
+            $column->setName($columnInfo['Field'])->setNull($columnInfo['Null'] !== 'NO')->setType($phinxType['name'])->setSigned(\strpos($columnInfo['Type'], 'unsigned') === \false)->setLimit($phinxType['limit'])->setScale($phinxType['scale'])->setComment($columnInfo['Comment']);
             if ($columnInfo['Extra'] === 'auto_increment') {
                 $column->setIdentity(\true);
             }
@@ -663,7 +662,7 @@ class MysqlAdapter extends \Phinx\Db\Adapter\PdoAdapter
             }
         }
         if (empty($instructions->getAlterParts())) {
-            throw new InvalidArgumentException(\sprintf("Not foreign key on columns '%s' exist", \implode(',', $columns)));
+            throw new InvalidArgumentException(\sprintf("No foreign key on column(s) '%s' exists", \implode(',', $columns)));
         }
         return $instructions;
     }
@@ -1153,12 +1152,10 @@ class MysqlAdapter extends \Phinx\Db\Adapter\PdoAdapter
     /**
      * @inheritDoc
      */
-    public function getDecoratedConnection() : Connection
+    protected function getDecoratedConnectionConfig() : array
     {
         $options = $this->getOptions();
         $options = ['username' => $options['user'] ?? null, 'password' => $options['pass'] ?? null, 'database' => $options['name'], 'quoteIdentifiers' => \true] + $options;
-        $driver = new MysqlDriver($options);
-        $driver->setConnection($this->connection);
-        return new Connection(['driver' => $driver] + $options);
+        return ['driver' => new MysqlDriver($options)] + $options;
     }
 }

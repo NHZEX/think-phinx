@@ -32,8 +32,8 @@
         "bamarni/composer-bin-plugin": "^1.8"
     },
     "replace": {
-        "robmorgan/phinx": "0.13.4",
-        "cakephp/database": "4.4.17"
+        "robmorgan/phinx": "0.14.0",
+        "cakephp/database": "4.5.5"
     },
     "autoload": {
         "psr-4": {

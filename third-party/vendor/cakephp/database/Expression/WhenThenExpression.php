@@ -24,6 +24,7 @@ use _Z_PhinxVendor\Cake\Database\ValueBinder;
 use Closure;
 use InvalidArgumentException;
 use LogicException;
+use function _Z_PhinxVendor\Cake\Core\getTypeName;
 /**
  * Represents a SQL when/then clause with a fluid API
  */

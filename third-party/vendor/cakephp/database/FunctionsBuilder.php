@@ -19,6 +19,7 @@ namespace _Z_PhinxVendor\Cake\Database;
 use _Z_PhinxVendor\Cake\Database\Expression\AggregateExpression;
 use _Z_PhinxVendor\Cake\Database\Expression\FunctionExpression;
 use InvalidArgumentException;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * Contains methods related to generating FunctionExpression objects
  * with most commonly used SQL functions.

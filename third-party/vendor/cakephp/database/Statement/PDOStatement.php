@@ -20,6 +20,7 @@ use _Z_PhinxVendor\Cake\Core\Exception\CakeException;
 use _Z_PhinxVendor\Cake\Database\DriverInterface;
 use PDO;
 use PDOStatement as Statement;
+use function _Z_PhinxVendor\Cake\Core\getTypeName;
 /**
  * Decorator for \PDOStatement class mainly used for converting human readable
  * fetch modes into PDO constants.
@@ -52,7 +53,6 @@ class PDOStatement extends StatementDecorator
     public function __get(string $property)
     {
         if ($property === 'queryString' && isset($this->_statement->queryString)) {
-            /** @psalm-suppress NoInterfaceProperties */
             return $this->_statement->queryString;
         }
         return null;

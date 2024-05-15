@@ -17,10 +17,14 @@ declare (strict_types=1);
 namespace _Z_PhinxVendor\Cake\Datasource;
 
 use _Z_PhinxVendor\Cake\Collection\Collection;
+use _Z_PhinxVendor\Cake\Core\Configure;
 use Countable;
 /**
  * Generic ResultSet decorator. This will make any traversable object appear to
  * be a database result
+ *
+ * @template T of \Cake\Datasource\EntityInterface|array
+ * @implements \Cake\Datasource\ResultSetInterface<T>
  */
 class ResultSetDecorator extends Collection implements ResultSetInterface
 {
@@ -40,5 +44,14 @@ class ResultSetDecorator extends Collection implements ResultSetInterface
             return $iterator->count();
         }
         return \count($this->toArray());
+    }
+    /**
+     * @inheritDoc
+     */
+    public function __debugInfo() : array
+    {
+        $parentInfo = parent::__debugInfo();
+        $limit = Configure::read('App.ResultSetDebugLimit', 10);
+        return \array_merge($parentInfo, ['items' => $this->take($limit)->toArray()]);
     }
 }

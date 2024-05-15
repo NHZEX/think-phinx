@@ -7,7 +7,6 @@
 namespace Phinx\Db\Adapter;
 
 use BadMethodCallException;
-use _Z_PhinxVendor\Cake\Database\Connection;
 use _Z_PhinxVendor\Cake\Database\Driver\Sqlserver as SqlServerDriver;
 use InvalidArgumentException;
 use PDO;
@@ -707,7 +706,7 @@ SQL;
     protected function getDropForeignKeyInstructions(string $tableName, string $constraint) : AlterInstructions
     {
         $instructions = new AlterInstructions();
-        $instructions->addPostStep(\sprintf('ALTER TABLE %s DROP CONSTRAINT %s', $this->quoteTableName($tableName), $constraint));
+        $instructions->addPostStep(\sprintf('ALTER TABLE %s DROP CONSTRAINT %s', $this->quoteTableName($tableName), $this->quoteColumnName($constraint)));
         return $instructions;
     }
     /**
@@ -984,12 +983,10 @@ SQL;
     /**
      * @inheritDoc
      */
-    public function getDecoratedConnection() : Connection
+    protected function getDecoratedConnectionConfig() : array
     {
         $options = $this->getOptions();
         $options = ['username' => $options['user'] ?? null, 'password' => $options['pass'] ?? null, 'database' => $options['name'], 'quoteIdentifiers' => \true] + $options;
-        $driver = new SqlServerDriver($options);
-        $driver->setConnection($this->connection);
-        return new Connection(['driver' => $driver] + $options);
+        return ['driver' => new SqlServerDriver($options)] + $options;
     }
 }

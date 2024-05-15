@@ -106,7 +106,7 @@ class LoggedQuery implements JsonSerializable
      */
     public function getContext() : array
     {
-        return ['numRows' => $this->numRows, 'took' => $this->took];
+        return ['numRows' => $this->numRows, 'took' => $this->took, 'role' => $this->driver ? $this->driver->getRole() : ''];
     }
     /**
      * Returns data that will be serialized as JSON

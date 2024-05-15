@@ -527,6 +527,5 @@ class PostgresSchemaDialect extends SchemaDialect
     }
 }
 // phpcs:disable
-// Add backwards compatible alias.
 \class_alias('_Z_PhinxVendor\\Cake\\Database\\Schema\\PostgresSchemaDialect', '_Z_PhinxVendor\\Cake\\Database\\Schema\\PostgresSchema');
 // phpcs:enable

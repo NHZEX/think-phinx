@@ -16,6 +16,7 @@ namespace _Z_PhinxVendor\Cake\Core\Exception;
 
 use RuntimeException;
 use Throwable;
+use function _Z_PhinxVendor\Cake\Core\deprecationWarning;
 /**
  * Base class that all CakePHP Exceptions extend.
  *
@@ -101,5 +102,5 @@ class CakeException extends RuntimeException
     }
 }
 // phpcs:disable
-\class_exists('_Z_PhinxVendor\\Cake\\Core\\Exception\\Exception');
+\class_alias('_Z_PhinxVendor\\Cake\\Core\\Exception\\CakeException', '_Z_PhinxVendor\\Cake\\Core\\Exception\\Exception');
 // phpcs:enable
