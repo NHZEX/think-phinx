@@ -55,6 +55,10 @@ return [
 
 ```
 
+## 注意事项
+
+1. 如果升级到`4.x`后执行命令行提示不存在请手动执行`./think service:discover`以重新发现服务。
+
 ## Doc
 - [Phinx EN](https://book.cakephp.org/phinx)
 - [Phinx CN](https://tsy12321.gitbooks.io/phinx-doc/content)
