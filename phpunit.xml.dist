@@ -13,10 +13,10 @@
 >
   <coverage processUncoveredFiles="true">
     <include>
-      <directory suffix=".php">src/</directory>
+      <directory suffix=".php">src-next/</directory>
     </include>
     <exclude>
-      <file>src/Service.php</file>
+      <file>src-next/Service.php</file>
     </exclude>
     <report>
       <html outputDirectory="tests/log/report" lowUpperBound="50" highLowerBound="80"/>
