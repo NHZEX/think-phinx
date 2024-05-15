@@ -50,6 +50,10 @@
         }
     },
     "extra": {
+        "bamarni-bin": {
+            "bin-links": true,
+            "forward-command": true
+        },
         "think": {
             "services": [
                 "Zxin\\Think\\Phinx\\Service"
@@ -69,6 +73,10 @@
         "post-install-cmd": [
             "@composer bin phpunit install --ansi",
             "@composer bin php-scoper install --ansi"
+        ],
+        "bin-all-update": [
+            "@composer bin phpunit update --ansi",
+            "@composer bin php-scoper update --ansi"
         ],
         "build-third-party": [
             "php-scoper add --working-dir=./third-party-src --output-dir=../third-party --force",
