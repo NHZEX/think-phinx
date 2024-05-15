@@ -13,12 +13,14 @@ jobs:
           - 7.4
           - 8.0
           - 8.1
+          - 8.2
+          - 8.3
         prefer-lowest: [false]
         experimental: [false]
-        include:
-          - php: 8.2
-            prefer-lowest: false
-            experimental: true
+#        include:
+#          - php: 8.4
+#            prefer-lowest: false
+#            experimental: true
     services:
       mysql:
         image: mysql:8.0
@@ -31,7 +33,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -55,7 +57,7 @@ jobs:
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache vendor
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: composer-cache
         with:
