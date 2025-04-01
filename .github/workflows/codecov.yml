@@ -2,6 +2,9 @@ name: codecov
 
 on: [push]
 
+permissions:
+  contents: read
+
 jobs:
   phpunit:
     runs-on: ubuntu-latest
