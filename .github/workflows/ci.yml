@@ -48,8 +48,8 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: pdo, pdo_mysql, mbstring #optional, setup extensions
-          coverage: none #optional, setup coverage driver
-          tools: phpunit:9
+          coverage: none
+          tools: none
 
       - name: Check Version
         run: |
@@ -81,7 +81,7 @@ jobs:
         run: composer update --prefer-dist --no-progress --no-suggest --prefer-lowest
 
       - name: Run test suite
-        run: phpunit -v
+        run: composer exe phpunit -- -v
         env:
           TESTS_DB_MYSQL_HOST: 127.0.0.1
           TESTS_DB_MYSQL_PORT: 13306

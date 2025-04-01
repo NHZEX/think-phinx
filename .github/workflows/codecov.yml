@@ -26,9 +26,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
-          extensions: pdo, pdo_mysql, mbstring #optional, setup extensions
-          coverage: pcov #optional, setup coverage driver
-          tools: phpunit:9
+          extensions: pdo, pdo_mysql, mbstring
+          coverage: xdebug
+          tools: none
 
       - name: Check Version
         run: |
@@ -55,7 +55,7 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: Run test suite
-        run: phpunit --coverage-clover=coverage.xml -v
+        run: composer exe phpunit -- --coverage-clover=coverage.xml -v
         env:
           TESTS_DB_MYSQL_HOST: 127.0.0.1
           TESTS_DB_MYSQL_PORT: 13306
