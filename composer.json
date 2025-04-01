@@ -78,6 +78,9 @@
             "@composer bin phpunit update --ansi",
             "@composer bin php-scoper update --ansi"
         ],
+        "phinx-src-update": [
+            "@composer -d third-party-src update --ansi"
+        ],
         "build-third-party": [
             "php-scoper add --working-dir=./third-party-src --output-dir=../third-party --force",
             "sleep 1",
