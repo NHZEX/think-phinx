@@ -293,7 +293,7 @@ class Inflector
         return $result;
     }
     /**
-     * Returns corresponding table name for given model $className. ("people" for the model class "Person").
+     * Returns corresponding table name for given model $className. ("people" for the class name "Person").
      *
      * @param string $className Name of class to get database table name for
      * @return string Name of the database table for given class
@@ -309,7 +309,7 @@ class Inflector
         return $result;
     }
     /**
-     * Returns Cake model class name ("Person" for the database table "people".) for given database table.
+     * Returns a singular, CamelCase inflection for given database table. ("Person" for the table name "people")
      *
      * @param string $tableName Name of database table to get class name for
      * @return string Class name
