@@ -36,7 +36,9 @@ composer require nhzex/think-phinx:5.0.x-dev zxin/think-symfony-bridge:dev-fix/s
 | 6.4.44 / 6.4.48 | 通过 | 1 测试 / 5 断言 | 排除生成列 schema 后，8 测试 / 69 断言通过 |
 | 7.4.17 / 7.4.21 | 通过 | 1 测试 / 5 断言 | 排除生成列 schema 后，8 测试 / 69 断言通过 |
 
-独立干净消费者保持默认 stable，并在根项目同时要求两个开发版本，安装与审计通过；除这两个明确要求的包外没有其他 dev 依赖。负向验证仅要求 think-phinx 时，Composer 因桥接分支不满足根项目 minimum-stability 而拒绝，证明上面的双依赖命令是必要的。预提交消费者验证使用本地 VCS 的 think-phinx 候选提交，桥接仍直接从 Packagist 下载远程 zip；它验证依赖元数据，不冒充尚未推送的新 think-phinx 的公开安装结果。新提交的远程消费者与 MySQL 8 CI 结果需在推送后另行记录。下文历史数据保留对应提交与依赖范围。
+独立干净消费者保持默认 stable，并在根项目同时要求两个开发版本，安装与审计通过；除这两个明确要求的包外没有其他 dev 依赖。负向验证仅要求 think-phinx 时，Composer 因桥接分支不满足根项目 minimum-stability 而拒绝，证明上面的双依赖命令是必要的。公开消费者随后仅使用 Packagist 和上述命令完成全新安装：think-phinx reference 为 `2db7d9ae70856a1870db6ae3b16baa4afbfd2c1e`，桥接为 `5587fd9b063dd97f3a1ac48d852928c16172b02c`，Config / Console 为 7.4.17 / 7.4.21。未配置自定义 repositories，审计、两模式 autoload、桥接接口实例化、参数读取和 silent 输出验证均通过。
+
+同一代码提交的 [升级矩阵 run 38998834567](https://github.com/NHZEX/think-phinx/actions/runs/38998834567) 八组及 [覆盖率 run 38998834607](https://github.com/NHZEX/think-phinx/actions/runs/38998834607) 均通过。全部使用 MySQL 8 完整套件；[PHP 8.5 + Symfony 7 日志](https://github.com/NHZEX/think-phinx/actions/runs/38998834567/job/117297242802) 确认上述桥接 reference、审计无公告、两模式 autoload 以及 9 测试 / 102 断言。下文历史数据保留对应提交与依赖范围。
 
 ## 安全约束
 
@@ -79,7 +81,7 @@ MariaDB 失败源于生成列的 `AS (...) VIRTUAL NOT NULL` / `STORED NOT NULL`
 
 ## 独立消费者依赖成本
 
-在 PHP 8.4.24、ThinkPHP 8.1.4 上创建独立消费者，使用 `--no-dev` 测量（不含 PHPUnit 等开发工具）。字节数是文件逻辑大小，分配大小受文件系统影响。
+历史 Symfony 6.4 / bridge 3.1 基线：在 PHP 8.4.24、ThinkPHP 8.1.4 上创建独立消费者，使用 `--no-dev` 测量（不含 PHPUnit 等开发工具）。字节数是文件逻辑大小，分配大小受文件系统影响。
 
 | 指标 | 仅 ThinkPHP 基线 | 加入 think-phinx 5.0 | 增量 |
 | --- | ---: | ---: | ---: |
@@ -88,7 +90,9 @@ MariaDB 失败源于生成列的 `AS (...) VIRTUAL NOT NULL` / `STORED NOT NULL`
 | vendor 文件逻辑字节 | 2,134,309 | 6,454,690 | +4,320,381（约 4.12 MiB） |
 | 文件系统分配字节 | 3,080,192 | 9,289,728 | +6,209,536 |
 
-完整生产 vendor 的逻辑大小约 6.16 MiB；没有安装完整 CakePHP 框架，仅所需组件。旧 4.1 的正常安装被已知安全公告阻断，因此没有关闭安全检查来取得一个误导性的旧/新对照。上述增量是相对于纯 ThinkPHP 基线，不能解读为相对于 4.1 的增长。
+当前 Symfony 7 / bridge 开发分支的公开消费者实测：32 个生产依赖、0 个开发工具依赖，vendor 共 1,167 文件、6,549,071 逻辑字节、9,433,088 分配字节。相对于上表纯 ThinkPHP 基线增加 4,414,762 逻辑字节（约 4.21 MiB）；相对于历史 6.4 / bridge 3.1 组合增加 18 文件、94,381 逻辑字节。
+
+历史组合完整生产 vendor 的逻辑大小约 6.16 MiB；没有安装完整 CakePHP 框架，仅所需组件。旧 4.1 的正常安装被已知安全公告阻断，因此没有关闭安全检查来取得一个误导性的旧/新对照。上述增量是相对于纯 ThinkPHP 基线，不能解读为相对于 4.1 的增长。
 
 ## Autoload 副作用
 
