@@ -9,13 +9,13 @@
 
 ## 安装
 
-5.0 尚未发布 tag，试用当前开发分支：
+5.0 与 Symfony 7 桥接兼容修复尚在开发分支联调，试用时在项目根目录显式允许这两个开发版本：
 
 ```sh
-composer require nhzex/think-phinx:5.0.x-dev
+composer require nhzex/think-phinx:5.0.x-dev zxin/think-symfony-bridge:dev-fix/symfony-7-compat
 ```
 
-需要 64 位 PHP 8.1+、Composer 2.1+；使用 Phinx `~0.16.12`（允许 0.16 系列补丁更新）、Symfony 6.4。升级前备份数据库，并在测试库验证迁移与回滚；依赖变化和兼容范围见 [5.0 升级说明](UPGRADE-5.0.md)。
+需要 64 位 PHP 8.1+、Composer 2.1+；使用 Phinx `~0.16.12`（允许 0.16 系列补丁更新）、Symfony 6.4 / 7（Symfony 7 需要 PHP 8.2+）。保持其余依赖默认 stable，无需全局降低 `minimum-stability`；当前不是稳定版安装路线。升级前备份数据库，并在测试库验证迁移与回滚；依赖变化和兼容范围见 [5.0 升级说明](UPGRADE-5.0.md)。
 
 ## 使用
 

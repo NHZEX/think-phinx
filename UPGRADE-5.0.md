@@ -13,9 +13,30 @@
 - 保留命令名、配置结构、`Zxin\Think\Phinx` 与旧 `HZEX\Phinx\Schema` 入口。
 - 模板通过 `InstalledVersions::getInstallPath('robmorgan/phinx')` 定位，不再依赖本包安装路径。
 - `topthink/think-helper` 最低 3.1.2，修正上游 ORM 允许解析到不兼容 helper 3.1.0/3.1.1 的依赖边界。
-- `zxin/phinx-schema` 最低 2.1.1，`zxin/think-symfony-bridge` 最低 3.1。
-- 目前 Config/Console 限定 Symfony 6.4。实测 bridge 3.1.0 在 Console 7.4.21 下发生 `InputBridge::getParameterOption ... must be compatible with ... : mixed` 致命错误，虽其 Composer 声明允许 7.x，仍不能直接开放。桥接库 4.0 候选已在独立 path 依赖环境完成联合验证；因尚未发布 4.0 稳定版，此包继续依赖已发布的 bridge 3.1，不引用不存在的 tag。
+- `zxin/phinx-schema` 最低 2.1.1，桥接库明确引用 `dev-fix/symfony-7-compat` 开发分支。
+- Config/Console 允许 `^6.4 || ^7.0`；PHP 8.1 使用 Symfony 6.4，Symfony 7 需要 PHP 8.2+。已发布 bridge 3.1.0 在 Console 7 下存在 `InputBridge::getParameterOption` 返回类型不兼容，因此本轮使用远程桥接修复分支，不能换回 3.1 后宣称支持 Symfony 7。
 - 替换 Phinx 0.16.6 起弃用的 `Util::mapClassNameToFileName()`；使用等价的时间戳 + `Util::toSnakeCase()`，避免 ThinkPHP 将弃用通知转为异常而导致创建迁移失败。
+
+## 开发分支联合测试路线
+
+无需等桥接库发布稳定 tag 即可测试：
+
+```sh
+composer require nhzex/think-phinx:5.0.x-dev zxin/think-symfony-bridge:dev-fix/symfony-7-compat
+```
+
+消费者根项目必须显式要求桥接开发分支；库内的 dev 要求不会替消费者放宽稳定性门槛。不要将全局 `minimum-stability` 改为 `dev`，也无需 inline alias。Packagist 已能解析桥接分支，2026-10-17 安装的 source/dist reference 为 `5587fd9b063dd97f3a1ac48d852928c16172b02c`，没有用本地 path 依赖替代桥接库，也没有添加 VCS repository。开发分支会移动，请保留应用的 composer.lock 以固定实际测试版本；正式发布前再评估稳定版本依赖。
+
+升级 CI 明确覆盖 PHP 8.1 + Symfony 6.4 的 latest / lowest、PHP 8.2 / 8.5 + Symfony 6.4，以及 PHP 8.2–8.5 + Symfony 7。每组以 `--with` 限定 Config/Console 系列，执行显式审计、两模式 autoload 和 MySQL 8 完整套件（含生成列），不能将本地 MariaDB 子集视为该 CI 的替代。
+
+2026-10-17 本地 PHP 8.4.24 联调（桥接均为上述远程 reference）：
+
+| Config / Console | 安装、审计、两模式 autoload | SQLite 生命周期 | MariaDB 11.8 子集 |
+| --- | --- | --- | --- |
+| 6.4.44 / 6.4.48 | 通过 | 1 测试 / 5 断言 | 排除生成列 schema 后，8 测试 / 69 断言通过 |
+| 7.4.17 / 7.4.21 | 通过 | 1 测试 / 5 断言 | 排除生成列 schema 后，8 测试 / 69 断言通过 |
+
+独立干净消费者保持默认 stable，并在根项目同时要求两个开发版本，安装与审计通过；除这两个明确要求的包外没有其他 dev 依赖。负向验证仅要求 think-phinx 时，Composer 因桥接分支不满足根项目 minimum-stability 而拒绝，证明上面的双依赖命令是必要的。预提交消费者验证使用本地 VCS 的 think-phinx 候选提交，桥接仍直接从 Packagist 下载远程 zip；它验证依赖元数据，不冒充尚未推送的新 think-phinx 的公开安装结果。新提交的远程消费者与 MySQL 8 CI 结果需在推送后另行记录。下文历史数据保留对应提交与依赖范围。
 
 ## 安全约束
 
@@ -26,7 +47,7 @@ Phinx 0.16.12 的宽松 CakePHP Database 依赖允许历史漏洞版本。此包
 
 没有关闭 Composer 安全检查。安全审计无公告匹配仅说明当前已知公告结果，不代表完整代码安全审计。
 
-## 已执行验证
+## 已执行验证（原稳定依赖基线）
 
 验证日期：2026-10-17。所有数据库操作均针对独立临时测试库。
 
@@ -79,15 +100,15 @@ MariaDB 失败源于生成列的 `AS (...) VIRTUAL NOT NULL` / `STORED NOT NULL`
 
 CakePHP 5 仍定义 `DS`、`CAKE_DATE_RFC7231` 两个全局常量；测试会报告它们，不声称完全没有全局符号变化。CakePHP Utility 自身的 Inflector 初始化也仍存在，恢复普通依赖不意味着所有静态初始化都消失。
 
-## CI 与未验证范围
+## 历史 CI 与未验证范围
 
-CI 已在代码提交 `339bff007bb3fe7dcdf0878cea4939dbc3028f46` 完成 PHP 8.1–8.4 最新依赖、PHP 8.1 最低依赖五组验证，均使用 MySQL 8；对应升级矩阵 run 38997087040 和覆盖率 run 38997086996 均成功。本文后续仅记录验证结果，不改变该已验证代码。
+CI 已在代码提交 `339bff007bb3fe7dcdf0878cea4939dbc3028f46` 完成 PHP 8.1–8.4 最新依赖、PHP 8.1 最低依赖五组验证，均使用 MySQL 8；对应升级矩阵 run 38997087040 和覆盖率 run 38997086996 均成功。这些历史运行只证明当时 bridge 3.1 / Symfony 6.4 基线，不代表当前开发分支联调已通过 CI。
 
 早期 codecov 运行的 setup-php 环境设置了 `COMPOSER_NO_AUDIT=1`，其安装成功不能单独证明审计执行。升级验证工作流随后加入了显式 `composer audit`，最终五组矩阵全部通过；[PHP 8.1 lowest job 117291913920](https://github.com/NHZEX/think-phinx/actions/runs/38997087040/job/117291913920) 明确记录审计无公告匹配、两种 autoload 模式通过、9 测试 / 102 断言通过。
 
 当前实际运行认证覆盖 ThinkPHP 8.1。独立强制求解 ThinkPHP `~6.1` 已被 Composer 安全公告拦截，未关闭安全检查；因此没有将其放入常规 CI 的成功矩阵。原有框架版本约束保留不等同于安全认证。ThinkPHP 8.0 尚未单独认证。
 
-尚未验证 PostgreSQL、SQL Server、实际业务项目已有的所有迁移、32 位 PHP（明确不支持）、已发布 bridge 3.1 下的 Symfony 7/8（当前 Console 约束不允许；候选桥接的 7.x 联调如上）。不发布 release，也不改 master。
+尚未验证 PostgreSQL、SQL Server、实际业务项目已有的所有迁移、32 位 PHP（明确不支持）、已发布 bridge 3.1 下的 Symfony 7，以及 Symfony Config/Console 8（当前约束不允许；其余 Symfony 组件可能由上游合法解析到 8）。不发布 release，也不改 master。
 
 ## 本地复现
 
