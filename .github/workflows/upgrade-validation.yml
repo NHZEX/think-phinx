@@ -1,8 +1,6 @@
-name: ci
+name: Phinx 5 upgrade validation
 
 on:
-  schedule:
-    - cron: "0 16 * * *"
   push:
   pull_request:
 
@@ -77,6 +75,9 @@ jobs:
       - name: Install dependencies (prefer-lowest)
         if: true == matrix.prefer-lowest
         run: composer update --prefer-dist --no-progress --prefer-lowest --prefer-stable
+
+      - name: Audit installed dependencies
+        run: composer audit
 
       - name: Check Composer autoload isolation
         run: composer test:autoload
