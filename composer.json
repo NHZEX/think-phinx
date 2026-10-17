@@ -4,7 +4,6 @@
     "description": "Phinx integration for thinkphp",
     "keywords": [
         "thinkphp",
-        "thinkphp6",
         "thinkphp8",
         "phinx",
         "migration"
@@ -24,10 +23,10 @@
         "robmorgan/phinx": "~0.16.12",
         "symfony/config": "^6.4 || ^7.0",
         "symfony/console": "^6.4 || ^7.0",
-        "topthink/framework": "~6.0|~6.1|~8.0|~8.1",
-        "topthink/think-orm": "^2.0.30|^3.0|^4.0",
+        "topthink/framework": "~8.0|~8.1",
+        "topthink/think-orm": "^3.0|^4.0",
         "zxin/phinx-schema": "^2.1.1",
-        "zxin/think-symfony-bridge": "dev-fix/symfony-7-compat",
+        "zxin/think-symfony-bridge": "^4.0",
         "cakephp/database": "^5.2.15",
         "topthink/think-helper": "^3.1.2"
     },

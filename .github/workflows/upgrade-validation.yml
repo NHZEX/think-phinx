@@ -75,7 +75,7 @@ jobs:
         if: true == matrix.prefer-lowest
         run: composer update --prefer-dist --no-progress --with "symfony/config:${{ matrix.symfony }}" --with "symfony/console:${{ matrix.symfony }}" --prefer-lowest --prefer-stable
 
-      - name: Show resolved bridge and Symfony versions
+      - name: Show resolved stable bridge and Symfony versions
         run: |
           composer show zxin/think-symfony-bridge --format=json
           composer show symfony/config
