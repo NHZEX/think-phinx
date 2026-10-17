@@ -55,7 +55,7 @@ MySQL 8 完整测试包含 virtual / stored 生成列的计算值和存储类型
 
 本地 PHP 8.4 + 桥接 4.0 验证覆盖 Symfony 6.4 / 7：审计、两模式 autoload、SQLite 生命周期（1 测试 / 5 断言）及 MariaDB 子集（8 测试 / 69 断言）。独立消费者仅允许 Think-Phinx 开发版本，稳定桥接安装及接口检查通过。
 
-上一版桥接修复分支的 [八组矩阵](https://github.com/NHZEX/think-phinx/actions/runs/38998834567) 与 [覆盖率](https://github.com/NHZEX/think-phinx/actions/runs/38998834607) 已通过 MySQL 8 完整套件（9 测试 / 102 断言）；稳定桥接版本的 CI 结果见 [Actions](https://github.com/NHZEX/think-phinx/actions/workflows/upgrade-validation.yml)。
+桥接 4.0 稳定版的 [八组 CI 矩阵](https://github.com/NHZEX/think-phinx/actions/runs/39000161548) 与 [覆盖率检查](https://github.com/NHZEX/think-phinx/actions/runs/39000161563) 均已通过，覆盖 PHP 8.1–8.5、Symfony 6.4 / 7 和 MySQL 8。
 
 ## 本地验证
 
