@@ -30,7 +30,9 @@ Phinx 0.16.12 的宽松 CakePHP Database 依赖允许历史漏洞版本。此包
 | `composer validate --strict` | 通过 |
 | 最新依赖安装 | PHP 8.4.24，Phinx 0.16.12、ThinkPHP 8.1.4、ORM 4.0.51、schema 2.1.1、bridge 3.1.0，通过 |
 | `composer test:autoload` | 新进程正常启动、预定义 `env()` 两种模式均通过 |
-| PHP 8.1 platform 最低依赖求解 | 通过；Database 5.2.15、ThinkPHP 8.1.0、ORM 3.0.3、helper 3.1.2、Console/Config 6.4.0；增加 ORM 类加载后的独立进程 autoload 通过。最低依赖组合的实际运行等待修正后的专用矩阵结果 |
+| PHP 8.1 platform 最低依赖求解 | 通过；Database 5.2.15、ThinkPHP 8.1.0、ORM 3.0.3、helper 3.1.2、Console/Config 6.4.0；增加 ORM 类加载后的独立进程 autoload 通过。修正后的真实 PHP 8.1 最低依赖 CI 已通过 9 测试 / 102 断言，显式审计无公告匹配 |
+| 最终代码完整 CI 矩阵 | 提交 `339bff007bb3fe7dcdf0878cea4939dbc3028f46`：[run 38997087040](https://github.com/NHZEX/think-phinx/actions/runs/38997087040)，PHP 8.1–8.4 latest 与 PHP 8.1 lowest 五组全部通过 |
+| 最终代码覆盖率 CI | 同一代码提交：[codecov run 38997086996](https://github.com/NHZEX/think-phinx/actions/runs/38997086996)，通过 |
 | bridge 4.0 候选 + Console 7.4.21 联合验证 | 独立 path 镜像：autoload 两模式通过，8 测试 / 69 断言通过（排除 MariaDB 生成列不兼容项） |
 | SQLite migrate → seed → rollback | 通过，验证表结构、记录值和迁移版本日志 |
 | GitHub Actions：PHP 8.1.34 + MySQL 8.0.46 | [codecov run 38996737772](https://github.com/NHZEX/think-phinx/actions/runs/38996737772)，完整 9 测试 / 102 断言通过；autoload 两模式通过，包含生成列 schema 回归 |
@@ -73,9 +75,9 @@ CakePHP 5 仍定义 `DS`、`CAKE_DATE_RFC7231` 两个全局常量；测试会报
 
 ## CI 与未验证范围
 
-CI 配置 PHP 8.1–8.4 的最新依赖、PHP 8.1 的最低依赖及 MySQL 8。PHP 8.1.34 + MySQL 8.0.46 已由上述 codecov CI 实际验证；其余专用矩阵结果应与具体提交对应。
+CI 已在代码提交 `339bff007bb3fe7dcdf0878cea4939dbc3028f46` 完成 PHP 8.1–8.4 最新依赖、PHP 8.1 最低依赖五组验证，均使用 MySQL 8；对应升级矩阵 run 38997087040 和覆盖率 run 38997086996 均成功。本文后续仅记录验证结果，不改变该已验证代码。
 
-该次 codecov 运行的 setup-php 环境设置了 `COMPOSER_NO_AUDIT=1`，不能把其安装成功解读为 CI 已执行安全审计。新的升级验证工作流加入显式 `composer audit` 步骤；本地 Composer 审计结果与 CI 功能测试结果分别记录。
+早期 codecov 运行的 setup-php 环境设置了 `COMPOSER_NO_AUDIT=1`，其安装成功不能单独证明审计执行。升级验证工作流随后加入了显式 `composer audit`，最终五组矩阵全部通过；[PHP 8.1 lowest job 117291913920](https://github.com/NHZEX/think-phinx/actions/runs/38997087040/job/117291913920) 明确记录审计无公告匹配、两种 autoload 模式通过、9 测试 / 102 断言通过。
 
 当前实际运行认证覆盖 ThinkPHP 8.1。独立强制求解 ThinkPHP `~6.1` 已被 Composer 安全公告拦截，未关闭安全检查；因此没有将其放入常规 CI 的成功矩阵。原有框架版本约束保留不等同于安全认证。ThinkPHP 8.0 尚未单独认证。
 
