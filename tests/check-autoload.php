@@ -29,6 +29,10 @@ if (!function_exists('env')) {
 if (!class_exists(Phinx\Migration\AbstractMigration::class)) {
     $failures[] = 'The public Phinx migration API cannot be autoloaded.';
 }
+// Load the ORM explicitly: incompatible helper contracts can otherwise hide until boot.
+if (!class_exists(think\Model::class)) {
+    $failures[] = 'The ThinkPHP ORM model API cannot be autoloaded.';
+}
 if (!class_exists(HZEX\Phinx\Schema::class)) {
     $failures[] = 'The legacy HZEX schema API cannot be autoloaded.';
 }

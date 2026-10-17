@@ -6,6 +6,7 @@
 - Phinx 精确使用 0.16.12，恢复普通 Composer 依赖；移除内置 vendor、scoper 构建、Composer replace 和独立工具 vendor-bin。
 - 保留命令名、配置结构、`Zxin\Think\Phinx` 与旧 `HZEX\Phinx\Schema` 入口。
 - 模板通过 `InstalledVersions::getInstallPath('robmorgan/phinx')` 定位，不再依赖本包安装路径。
+- `topthink/think-helper` 最低 3.1.2，修正上游 ORM 允许解析到不兼容 helper 3.1.0/3.1.1 的依赖边界。
 - `zxin/phinx-schema` 最低 2.1.1，`zxin/think-symfony-bridge` 最低 3.1。
 - 目前 Config/Console 限定 Symfony 6.4。实测 bridge 3.1.0 在 Console 7.4.21 下发生 `InputBridge::getParameterOption ... must be compatible with ... : mixed` 致命错误，虽其 Composer 声明允许 7.x，仍不能直接开放。桥接库 4.0 候选已在独立 path 依赖环境完成联合验证；因尚未发布 4.0 稳定版，此包继续依赖已发布的 bridge 3.1，不引用不存在的 tag。
 - 替换 Phinx 0.16.6 起弃用的 `Util::mapClassNameToFileName()`；使用等价的时间戳 + `Util::toSnakeCase()`，避免 ThinkPHP 将弃用通知转为异常而导致创建迁移失败。
@@ -29,7 +30,7 @@ Phinx 0.16.12 的宽松 CakePHP Database 依赖允许历史漏洞版本。此包
 | `composer validate --strict` | 通过 |
 | 最新依赖安装 | PHP 8.4.24，Phinx 0.16.12、ThinkPHP 8.1.4、ORM 4.0.51、schema 2.1.1、bridge 3.1.0，通过 |
 | `composer test:autoload` | 新进程正常启动、预定义 `env()` 两种模式均通过 |
-| PHP 8.1 platform 最低依赖求解 | 通过；Database 5.2.15、ThinkPHP 8.1.0、ORM 3.0.3、Console/Config 6.4.0；独立进程 autoload 通过。最低依赖组合的实际运行等待专用矩阵结果 |
+| PHP 8.1 platform 最低依赖求解 | 通过；Database 5.2.15、ThinkPHP 8.1.0、ORM 3.0.3、helper 3.1.2、Console/Config 6.4.0；增加 ORM 类加载后的独立进程 autoload 通过。最低依赖组合的实际运行等待修正后的专用矩阵结果 |
 | bridge 4.0 候选 + Console 7.4.21 联合验证 | 独立 path 镜像：autoload 两模式通过，8 测试 / 69 断言通过（排除 MariaDB 生成列不兼容项） |
 | SQLite migrate → seed → rollback | 通过，验证表结构、记录值和迁移版本日志 |
 | GitHub Actions：PHP 8.1.34 + MySQL 8.0.46 | [codecov run 38996737772](https://github.com/NHZEX/think-phinx/actions/runs/38996737772)，完整 9 测试 / 102 断言通过；autoload 两模式通过，包含生成列 schema 回归 |
@@ -38,6 +39,14 @@ Phinx 0.16.12 的宽松 CakePHP Database 依赖允许历史漏洞版本。此包
 MariaDB 失败源于生成列的 `AS (...) VIRTUAL NOT NULL` / `STORED NOT NULL` SQL：MariaDB 不接受此语法，现有 schema fixture 本身也使用非空生成列。因此没有为了适配测试服务器修改业务 SQL，也没有将 MariaDB 结果等同于 MySQL 结果。真实 MySQL 8.0.46 的完整 CI 已通过 9 测试 / 102 断言，包括这项生成列回归。
 
 生成列回归新增了 virtual/stored 两种列的插入计算值、更新计算值和存储类型断言；同时强化了模板内容、seed 写入记录和回滚清理断言。
+
+### 最低依赖修正
+
+[升级矩阵 run 38996899795](https://github.com/NHZEX/think-phinx/actions/runs/38996899795) 的 PHP 8.1–8.4 最新依赖组通过，但 PHP 8.1 最低组暴露上游契约不匹配：ORM 3.0.3 的 `toJson(int $options): string` 与 helper 3.1.0 的无类型 `Jsonable::toJson($options = 0)` 不兼容。
+
+核对官方源码，[helper v3.1.1](https://github.com/top-think/think-helper/blob/v3.1.1/src/contract/Jsonable.php) 仍是旧签名，[v3.1.2](https://github.com/top-think/think-helper/blob/v3.1.2/src/contract/Jsonable.php) 首次提供匹配的类型签名。因此只收紧已存在的 helper 依赖为 `^3.1.2`，并在独立 autoload 回归中显式加载 `think\Model`。没有跳过最低测试或修改第三方 vendor。
+
+同时核对 ORM 2.0.30、2.0.62 的 `toJson(int ...): string` 和 `toArray(): array` 签名，与 helper 3.1.2 契约匹配；这只是相关接口核对，不代表已对所有历史框架组合完成运行认证。
 
 ## 独立消费者依赖成本
 

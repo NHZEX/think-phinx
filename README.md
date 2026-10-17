@@ -14,6 +14,7 @@ composer require nhzex/think-phinx
 5.0 使用 Composer 正常安装 `robmorgan/phinx:0.16.12`，不再内置依赖副本、使用 PHP-Scoper 或通过 `replace` 声明提供 Phinx/CakePHP。
 
 - 需要 64 位 PHP 8.1 或更高版本，以及 Composer 2.1+。
+- `topthink/think-helper` 最低 3.1.2，避免最低依赖解析到与 ORM 类型签名不兼容的旧 Jsonable 接口。
 - 配套库最低版本为 `zxin/phinx-schema:^2.1.1`、`zxin/think-symfony-bridge:^3.1`，Symfony Config/Console 限定 6.4 LTS（现有 bridge 的接口签名不兼容 Console 7）。
 - 保留 `migrate:*` / `seed:*` 命令、`Zxin\Think\Phinx` 和旧 `HZEX\Phinx\Schema` API。
 - 使用上游 Phinx/CakePHP 命名空间，删除的内部 `third-party` 路径不属于业务 API。默认迁移和 seed 模板从 Composer 实际安装目录读取，支持自定义 `vendor-dir`。
