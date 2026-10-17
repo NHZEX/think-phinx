@@ -36,8 +36,15 @@ if (!class_exists(think\Model::class)) {
 if (!class_exists(HZEX\Phinx\Schema::class)) {
     $failures[] = 'The legacy HZEX schema API cannot be autoloaded.';
 }
-if (Composer\InstalledVersions::getPrettyVersion('robmorgan/phinx') !== '0.16.12') {
-    $failures[] = 'The installed Phinx version is not 0.16.12.';
+// Composer normalizes stable versions (including v-prefixed tags) to four numeric parts.
+// Match ~0.16.12 with the project's default stable-only minimum stability.
+$phinxVersion = Composer\InstalledVersions::getVersion('robmorgan/phinx');
+if ($phinxVersion === null
+    || preg_match('/^\d+\.\d+\.\d+\.\d+$/D', $phinxVersion) !== 1
+    || version_compare($phinxVersion, '0.16.12.0', '<')
+    || version_compare($phinxVersion, '0.17.0.0', '>=')
+) {
+    $failures[] = 'The installed Phinx version does not satisfy ~0.16.12 (stable): ' . ($phinxVersion ?? 'unknown');
 }
 
 $dependencyPaths = [];

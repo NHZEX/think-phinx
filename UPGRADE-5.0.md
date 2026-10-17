@@ -2,8 +2,14 @@
 
 ## 依赖与兼容边界
 
+| 版本 | Phinx | 依赖方式 |
+| --- | --- | --- |
+| 4.0.* | 0.13.4 | 内置 bundle |
+| 4.1.* | 0.14.0 | 内置 bundle |
+| 5.0 | ~0.16.12 | 普通 Composer 依赖 |
+
 - PHP / php-64bit 最低 8.1，Composer runtime API 最低 2.1。
-- Phinx 精确使用 0.16.12，恢复普通 Composer 依赖；移除内置 vendor、scoper 构建、Composer replace 和独立工具 vendor-bin。
+- Phinx 使用 `~0.16.12`（`>=0.16.12 <0.17.0`），允许 0.16 系列补丁更新，恢复普通 Composer 依赖；移除内置 vendor、scoper 构建、Composer replace 和独立工具 vendor-bin。
 - 保留命令名、配置结构、`Zxin\Think\Phinx` 与旧 `HZEX\Phinx\Schema` 入口。
 - 模板通过 `InstalledVersions::getInstallPath('robmorgan/phinx')` 定位，不再依赖本包安装路径。
 - `topthink/think-helper` 最低 3.1.2，修正上游 ORM 允许解析到不兼容 helper 3.1.0/3.1.1 的依赖边界。
@@ -69,7 +75,7 @@ MariaDB 失败源于生成列的 `AS (...) VIRTUAL NOT NULL` / `STORED NOT NULL`
 
 1. ThinkPHP 启动 helper 后，`env()` 必须来自已安装的 ThinkPHP；预定义的 `env()` 必须保持不变。
 2. Composer 加载及公开 Phinx / Schema 类加载不得引入来自 Phinx/CakePHP 包目录的全局函数。
-3. 普通 Composer 安装必须提供 Phinx 0.16.12 与旧 Schema 入口。
+3. 普通 Composer 安装必须提供符合 `~0.16.12` 的稳定版 Phinx 与旧 Schema 入口。
 
 CakePHP 5 仍定义 `DS`、`CAKE_DATE_RFC7231` 两个全局常量；测试会报告它们，不声称完全没有全局符号变化。CakePHP Utility 自身的 Inflector 初始化也仍存在，恢复普通依赖不意味着所有静态初始化都消失。
 
@@ -94,4 +100,4 @@ composer test -- --filter SqliteLifecycleTest
 composer test
 ```
 
-完整套件会删除并重建测试数据库，禁止使用生产数据库连接。
+测试需要 `pdo_sqlite`；完整套件还需要 MySQL 和 `pdo_mysql`，通过 `TESTS_DB_MYSQL_*` 环境变量配置连接（见 `phpunit.xml.dist`）。完整套件会删除并重建测试数据库，禁止使用生产数据库连接。
