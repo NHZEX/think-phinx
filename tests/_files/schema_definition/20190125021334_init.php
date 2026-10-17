@@ -35,6 +35,12 @@ class Init extends AbstractMigration
     public function change()
     {
         Schema::cxt($this, function () {
+            Schema::create('generated_compatibility', function (Blueprint $blueprint) {
+                $blueprint->integer('base_value');
+                $blueprint->integer('virtual_value')->generated('`base_value` * 2');
+                $blueprint->integer('stored_value')->generated('`base_value` * 3', true);
+            });
+
             Schema::create('test_generated', function (Blueprint $blueprint) {
                 $blueprint->comment = '订单菜品';
                 $blueprint->unsigned = true;

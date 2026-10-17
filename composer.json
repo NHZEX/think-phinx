@@ -17,32 +17,27 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
+        "php": ">=8.1",
+        "php-64bit": ">=8.1",
         "composer-runtime-api": "^2.1",
         "psr/container": "^1.0 || ^2.0",
-        "robmorgan/phinx": "~0.14",
-        "symfony/config": "^5.4|^6.0",
-        "symfony/console": "^5.4|^6.0",
+        "robmorgan/phinx": "0.16.12",
+        "symfony/config": "^6.4",
+        "symfony/console": "^6.4",
         "topthink/framework": "~6.0|~6.1|~8.0|~8.1",
         "topthink/think-orm": "^2.0.30|^3.0|^4.0",
-        "zxin/phinx-schema": "^1.0.2|^2.0.0",
-        "zxin/think-symfony-bridge": "^3.0"
+        "zxin/phinx-schema": "^2.1.1",
+        "zxin/think-symfony-bridge": "^3.1",
+        "cakephp/database": "^5.2.15"
     },
     "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.8"
-    },
-    "replace": {
-        "robmorgan/phinx": "0.14.0",
-        "cakephp/database": "4.5.5"
+        "phpunit/phpunit": "^9.6"
     },
     "autoload": {
         "psr-4": {
             "HZEX\\Phinx\\": "src",
             "Zxin\\Think\\Phinx\\": "src-next"
-        },
-        "files": [
-            "third-party/vendor/scoper-autoload.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
@@ -50,10 +45,6 @@
         }
     },
     "extra": {
-        "bamarni-bin": {
-            "bin-links": true,
-            "forward-command": true
-        },
         "think": {
             "services": [
                 "Zxin\\Think\\Phinx\\Service"
@@ -64,29 +55,16 @@
         }
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "bamarni/composer-bin-plugin": true
-        }
+        "sort-packages": true
     },
     "scripts": {
-        "post-install-cmd": [
-            "@composer bin phpunit install --ansi",
-            "@composer bin php-scoper install --ansi"
-        ],
-        "bin-all-update": [
-            "@composer bin phpunit update --ansi",
-            "@composer bin php-scoper update --ansi"
-        ],
-        "phinx-src-update": [
-            "@composer -d third-party-src update --ansi"
-        ],
-        "build-third-party": [
-            "php-scoper add --working-dir=./third-party-src --output-dir=../third-party --force",
-            "sleep 1",
-            "@composer --working-dir=./third-party dump-autoload",
-            "sleep 1",
-            "rm -r ./._* || rm -r ./..* || true"
+        "test": "phpunit",
+        "test:autoload": [
+            "@php tests/check-autoload.php",
+            "@php tests/check-autoload.php --predefined-env"
         ]
+    },
+    "conflict": {
+        "cakephp/database": ">=5.3 <5.3.7"
     }
 }

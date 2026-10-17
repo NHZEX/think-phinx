@@ -99,12 +99,18 @@ class ManagerTest extends TestCase
         $this->call('migrate:create', ['TestMigration'], $exitCode, 'console');
         $this->assertEquals(AbstractCommand::CODE_SUCCESS, $exitCode, "call migrate:create fail");
 
-        $this->assertTrue(glob($tmp . 'migrations/*_test_migration.php') >= 1);
+        $this->assertCount(1, glob($tmp . 'migrations/*_test_migration.php'));
+        $migration = file_get_contents(glob($tmp . 'migrations/*_test_migration.php')[0]);
+        $this->assertStringContainsString('class TestMigration extends AbstractMigration', $migration);
+        $this->assertStringNotContainsString('%%', $migration);
 
         $this->call('seed:create', ['SeedMigration'], $exitCode, 'console');
         $this->assertEquals(AbstractCommand::CODE_SUCCESS, $exitCode, "call seed:create fail");
 
-        $this->assertTrue(is_file($tmp . 'seeds/SeedMigration.php'));
+        $this->assertFileExists($tmp . 'seeds/SeedMigration.php');
+        $seed = file_get_contents($tmp . 'seeds/SeedMigration.php');
+        $this->assertStringContainsString('class SeedMigration extends AbstractSeed', $seed);
+        $this->assertStringNotContainsString('%%', $seed);
     }
 
     public function testMigrate()
@@ -245,6 +251,18 @@ class ManagerTest extends TestCase
         $this->callMigrate('run', ['-e', 'main', '-t', '20190125021334']);
 
         $this->assertTrue($adapter->hasTable('system'));
+        $adapter->execute('INSERT INTO generated_compatibility (base_value) VALUES (5)');
+        $generated = $adapter->fetchRow('SELECT virtual_value, stored_value FROM generated_compatibility');
+        $this->assertSame(10, (int) $generated['virtual_value']);
+        $this->assertSame(15, (int) $generated['stored_value']);
+        $adapter->execute('UPDATE generated_compatibility SET base_value = 7');
+        $generated = $adapter->fetchRow('SELECT virtual_value, stored_value FROM generated_compatibility');
+        $this->assertSame(14, (int) $generated['virtual_value']);
+        $this->assertSame(21, (int) $generated['stored_value']);
+        $columns = $adapter->fetchAll("SHOW COLUMNS FROM generated_compatibility");
+        $extras = array_column($columns, 'Extra', 'Field');
+        $this->assertStringContainsString('VIRTUAL', strtoupper($extras['virtual_value']));
+        $this->assertStringContainsString('STORED', strtoupper($extras['stored_value']));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
         $this->assertTrue($adapter->hasPrimaryKey('system', ['label']));
         $this->assertEquals(26, count($adapter->getColumns('system')));
@@ -307,6 +325,12 @@ class ManagerTest extends TestCase
 
         $this->callMigrate('run');
         $this->callSeed('run');
+        $this->assertCount(3, $adapter->fetchAll('SELECT * FROM info'));
+        $this->assertCount(2, $adapter->fetchAll('SELECT * FROM users'));
+
+        $this->callMigrate('rollback', ['-t', '0']);
+        $this->assertFalse($adapter->hasTable('info'));
+        $this->assertFalse($adapter->hasTable('users'));
     }
 
     /**

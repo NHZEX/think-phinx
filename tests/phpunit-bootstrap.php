@@ -3,7 +3,6 @@
 use think\App;
 use Zxin\Think\Phinx\Service;
 
-//require __DIR__ . '/../third-party-build/vendor/scoper-autoload.php';
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/TestConfiguration.php';
 
@@ -18,4 +17,6 @@ $app->config->set([
         ],
     ],
 ], 'cache');
-var_dump($app->console->getLongVersion());
+
+// Initialize the console and framework helpers without printing to PHPUnit output.
+$app->console->setAutoExit(false);

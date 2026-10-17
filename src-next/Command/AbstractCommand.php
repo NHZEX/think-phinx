@@ -227,9 +227,12 @@ abstract class AbstractCommand extends Command
 
     protected function getPhinxPath(): string
     {
-        $rootDir = InstalledVersions::getInstallPath('nhzex/think-phinx');
-        $rootDir = \rtrim($rootDir, '\\/');
-        return $rootDir . DIRECTORY_SEPARATOR . 'third-party/vendor/robmorgan/phinx' . DIRECTORY_SEPARATOR;
+        $rootDir = InstalledVersions::getInstallPath('robmorgan/phinx');
+        if ($rootDir === null) {
+            throw new \RuntimeException('Cannot locate the Composer installation of robmorgan/phinx.');
+        }
+
+        return \rtrim($rootDir, '\\/') . DIRECTORY_SEPARATOR;
     }
 
     /**

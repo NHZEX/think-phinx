@@ -136,7 +136,7 @@ class Create extends AbstractCommand
             }
 
             // Compute the file path
-            $fileName = Util::mapClassNameToFileName($className);
+            $fileName = Util::getCurrentTimestamp() . Util::toSnakeCase($className) . '.php';
         }
 
         if (!Util::isUniqueMigrationClassName($className, $path)) {

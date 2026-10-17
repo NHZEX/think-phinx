@@ -17,18 +17,16 @@ jobs:
       fail-fast: false
       matrix:
         php:
-          - 7.4
-          - 8.0
           - 8.1
           - 8.2
           - 8.3
           - 8.4
         prefer-lowest: [false]
         experimental: [false]
-#        include:
-#          - php: 8.4
-#            prefer-lowest: false
-#            experimental: true
+        include:
+          - php: '8.1'
+            prefer-lowest: true
+            experimental: false
     services:
       mysql:
         image: mysql:8.0
@@ -47,9 +45,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: pdo, pdo_mysql, mbstring #optional, setup extensions
+          extensions: pdo, pdo_mysql, pdo_sqlite, mbstring
           coverage: none
-          tools: none
+          tools: composer:v2
 
       - name: Check Version
         run: |
@@ -58,7 +56,7 @@ jobs:
           composer -V
 
       - name: Validate composer.json and composer.lock
-        run: composer validate
+        run: composer validate --strict
 
       - name: Get composer cache directory
         id: composercache
@@ -72,13 +70,16 @@ jobs:
           path: ${{ steps.composercache.outputs.dir }}
           key: ${{ runner.os }}-php-${{ matrix.php }}-build-${{ env.cache-name }}
 
-      - name: Install dependencies (composer.lock)
+      - name: Install dependencies (latest)
         if: false == matrix.prefer-lowest
-        run: composer install --prefer-dist --no-progress
+        run: composer update --prefer-dist --no-progress
 
       - name: Install dependencies (prefer-lowest)
         if: true == matrix.prefer-lowest
-        run: composer update --prefer-dist --no-progress --no-suggest --prefer-lowest
+        run: composer update --prefer-dist --no-progress --prefer-lowest --prefer-stable
+
+      - name: Check Composer autoload isolation
+        run: composer test:autoload
 
       - name: Run test suite
         run: composer exe phpunit -- -v
